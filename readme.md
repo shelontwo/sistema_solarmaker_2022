@@ -1,12 +1,4 @@
-# BASE CMS LARAVEL 8.56.0 - 2021
-
-Painel Administrativo (CMS) base para desenvolvimento dos projetos da **D3T Softwares Personalizados**.
-A base já vem com os módulos de:
-
-- Login
-- Grupos de usuários
-- Usuários
-- Páginas
+# SOLAR MAKER CMS LARAVEL 9 - 2022
 
 ## RODAR PROJETO
 
@@ -33,7 +25,3 @@ Dentro do container rode os seguintes comandos:
 
 O Docker por padrão deverá rodar o `$ npm run watch` e o `$ php artisan serve`.
 Para rodar os comandos _make_ do **Laravel** faça isso fora do Docker para evitar problemas de permissões de arquivos.
-
-## CONTRIBUIR
-
-Escolha um **_issue_**, crie uma **_branch_** e submeta um **_pull request_** para a **_master_**.
