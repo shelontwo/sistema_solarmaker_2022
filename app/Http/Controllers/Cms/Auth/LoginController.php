@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Cms\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
 class LoginController extends Controller
 {
     /*
@@ -48,4 +48,11 @@ class LoginController extends Controller
         return 'username';
 
     }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/cms/login');
+    }
+
 }

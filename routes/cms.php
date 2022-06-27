@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('blog_posts.gallery', 'Cms\BlogGalleryController');
     Route::post('upload-images', 'Cms\UploadImageController@editorUpload')->name('upload-images');
     Route::get('/preview/{slug}', 'Cms\BlogPostsController@preview')->name('blog.preview');
-});
+  });
 
   Route::post('logout', 'Cms\Auth\LoginController@logout')->name('logout');
 
