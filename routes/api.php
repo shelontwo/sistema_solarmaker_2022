@@ -11,16 +11,22 @@
 |
  */
 
-Route::middleware('cors')->group(function () {
-    Route::get('/', function () {
-        return response(['API' => 'Works'], 200);
-    });
-});
+// Route::middleware('cors')->group(function () {
+//     Route::get('/', function () {
+//         return response(['API' => 'Works'], 200);
+//     });
+// });
 
 // Route::middleware('logs')->group(function () {
     Route::prefix('user')->group(function () {
         Route::post('login', 'Api\AuthController@login')->name('auth.login');
         Route::post('register', 'Api\AuthController@register')->name('auth.register');
+    });
+
+    Route::middleware('auth:api')->group(function () {
+        Route::get('/', function () {
+            return response(['API' => 'Works'], 200);
+        });
     });
 
     Route::post('/patrocinador', 'Api\InterestedSponsor@create');

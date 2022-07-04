@@ -13,7 +13,8 @@
     "laravel/framework": "^9.0",
     "laravel/helpers": "^1.1",
     "laravel/tinker": "^2.6.1",
-    "laravel/ui": "^3.4"
+    "laravel/ui": "^3.4",
+    "php-open-source-saver/jwt-auth": "^1.4"
   },
   "require-dev": {
     "beyondcode/laravel-dump-server": "^1.0",
