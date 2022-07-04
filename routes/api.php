@@ -11,13 +11,7 @@
 |
  */
 
-// Route::middleware('cors')->group(function () {
-//     Route::get('/', function () {
-//         return response(['API' => 'Works'], 200);
-//     });
-// });
-
-// Route::middleware('logs')->group(function () {
+Route::middleware('cors')->group(function () {
     Route::prefix('user')->group(function () {
         Route::post('login', 'Api\AuthController@login')->name('auth.login');
         Route::post('register', 'Api\AuthController@register')->name('auth.register');
@@ -28,10 +22,8 @@
             return response(['API' => 'Works'], 200);
         });
     });
+});
 
-    Route::post('/patrocinador', 'Api\InterestedSponsor@create');
-    Route::post('/lp', 'Api\LP@contact');
-    Route::post('/save', 'Api\DirectSellController@save')->name('direct-sell-save');
-    Route::post('/sellConfirm', 'Api\DirectSellController@sellConfirm')->name('confirm-sell');
-    Route::post('/sellCancel', 'Api\DirectSellController@sellCancel')->name('cancel-sell');
+// Route::middleware('logs')->group(function () {
+    
 // });
