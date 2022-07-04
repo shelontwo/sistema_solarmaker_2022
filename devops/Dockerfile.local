@@ -14,4 +14,3 @@ RUN apt-get update && apt-get install -y gnupg2 && apt-get install -y curl \
     && npm i -g npm
 
 COPY ./devops/supervisor/phpserve.conf /opt/docker/etc/supervisor.d/phpserve.conf
-COPY ./devops/supervisor/vuestart.conf /opt/docker/etc/supervisor.d/vuestart.conf
