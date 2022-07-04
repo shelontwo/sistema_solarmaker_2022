@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -42,7 +42,7 @@ class Group extends Model
 	 */
 	public function modules()
 	{
-		return $this->belongsToMany('App\Module', 'group_module');
+		return $this->belongsToMany(Module::class, 'group_module');
 	}
 
 	/**
@@ -50,7 +50,7 @@ class Group extends Model
 	 */
 	public function users()
 	{
-		return $this->hasMany('App\User');
+		return $this->hasMany(User::class);
 	}
 
 	/**
@@ -58,7 +58,7 @@ class Group extends Model
 	 */
 	public function menu()
 	{
-		$modules = $this->belongsToMany('App\Module', 'group_module')->orderBy('father_order')->orderBy('order')->get();
+		$modules = $this->belongsToMany(Module::class, 'group_module')->orderBy('father_order')->orderBy('order')->get();
 
 		$menuFathers = [];
 		foreach ($modules as $key => $value) {

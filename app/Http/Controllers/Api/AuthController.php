@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Client;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use App\User;
-use App\UserAuth;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -22,15 +20,18 @@ class AuthController extends Controller
 			'email' => 'required|string|email',
 			'password' => 'required|string'
 		]);
-		$user_auth = UserAuth::where('email', $request['email'])->first();
+		$user_auth = User::where('email', $request['email'])->first();
+
 		if (empty($user_auth)) {
 			return response(['msg' => 'Não existe conta para este e-mail', 'email' => true], 403);
 		} else if (!Hash::check($request['password'], $user_auth->password)) {
 			return response(['msg' => 'Senha incorreta!', 'password' => true], 403);
 		}
+		
 		Auth::login($user_auth);
 		$token = Str::random(80);
 		$hashed_token = bcrypt($token);
+
 		$user_auth->update(['token' => $hashed_token]);
 		return $hashed_token;
 	}
@@ -50,7 +51,6 @@ class AuthController extends Controller
 			'person_type' => 'in:pf,pj',
 			'name' => 'required|string',
 			'birthday' => 'required|date_format:d/m/Y',
-
 		])->validate();
 
 		Validator::make($request->address, [

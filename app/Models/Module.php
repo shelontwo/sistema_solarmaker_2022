@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +18,7 @@ class Module extends Model
      */
     public function submodules()
     {
-        return $this->hasMany('App\Module', 'father_path', 'path')->orderBy('order');
+        return $this->hasMany(Module::class, 'father_path', 'path')->orderBy('order');
     }
 
     /**
@@ -26,6 +26,6 @@ class Module extends Model
      */
     public function groups()
     {
-        return $this->belongsToMany('App\Group', 'group_module');
+        return $this->belongsToMany(Group::class, 'group_module');
     }
 }

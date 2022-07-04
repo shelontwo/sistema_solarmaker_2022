@@ -12,7 +12,6 @@ use App\Speakers;
 
 class SpeakerController extends Controller
 {
-
     public function list(Request $request)
     {
         $dados = $request->all();
