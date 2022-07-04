@@ -23,7 +23,7 @@
     RewriteCond %{HTTP_HOST} ^(www\.) [OR]
     RewriteCond %{HTTPS} off
     RewriteCond %{HTTP_HOST} ^(www\.)?(.+)
-    RewriteRule (.*) https://cms.eventohoje.com.br%{REQUEST_URI} [R,L]
+    RewriteRule (.*) https://solarmaker.d3t.com.br%{REQUEST_URI} [R,L]
 
     Header add Access-Control-Allow-Origin "*"
     Header add Access-Control-Allow-Headers "origin, x-requested-with, content-type"

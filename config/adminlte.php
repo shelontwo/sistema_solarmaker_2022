@@ -14,7 +14,7 @@ return [
     */
 
 
-    'title' => 'Central do Palestrante | CMS',
+    'title' => 'SOLAR MAKER API',
 
 
     'title_prefix' => '',
