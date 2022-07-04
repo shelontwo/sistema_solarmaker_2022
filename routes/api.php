@@ -23,7 +23,7 @@
         Route::post('register', 'Api\AuthController@register')->name('auth.register');
     });
 
-    Route::middleware('auth:api')->group(function () {
+    Route::middleware('apiJwt')->group(function () {
         Route::get('/', function () {
             return response(['API' => 'Works'], 200);
         });
