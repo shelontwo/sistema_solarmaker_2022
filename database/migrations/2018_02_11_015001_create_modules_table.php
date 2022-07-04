@@ -18,8 +18,9 @@ class CreateModulesTable extends Migration
             $table->string('name', 50);
             $table->string('father_path')->nullable();
             $table->string('path');
+            $table->integer('father_order')->default(0);
             $table->integer('order')->default(0)->index();
-            $table->string('icon', 100);
+            $table->string('icon')->default('');
             $table->boolean('has_son')->default(0);
             $table->timestamps();
         });
