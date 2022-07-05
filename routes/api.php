@@ -16,8 +16,10 @@ Route::middleware(['cors', 'logs'])->group(function () {
         Route::post('login', 'Api\AuthController@login')->name('auth.login');
         Route::post('register', 'Api\AuthController@register')->name('auth.register');
     });
-
+    
     Route::middleware('apiJwt')->group(function () {
+        Route::post('user/logout', 'Api\AuthController@logout')->name('auth.logout');
+
         Route::get('logs', 'Api\LogController@index');
         Route::get('logs/{log}', 'Api\LogController@show');
 
