@@ -21,6 +21,10 @@ class Logs
 
   public function terminate($request, $response)
     {
+        if ($request->path() == 'api/logs') {
+            return true;
+        }
+
         $request_json = '';
         if (!empty($request->all())) {
             $request_json = $request->all();

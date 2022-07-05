@@ -18,6 +18,9 @@ Route::middleware(['cors', 'logs'])->group(function () {
     });
 
     Route::middleware('apiJwt')->group(function () {
+        Route::get('logs', 'Api\LogController@index');
+        Route::get('logs/{log}', 'Api\LogController@show');
+
         Route::get('/', function () {
             return response(['API' => 'Works'], 200);
         });
