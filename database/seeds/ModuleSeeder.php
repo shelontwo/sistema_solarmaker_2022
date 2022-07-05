@@ -15,57 +15,37 @@ class ModuleSeeder extends Seeder
     {
         $current_timestamp = date('Y-m-d h:i:s');
 
-        DB::table('modules')->insert([
+        DB::table('modulos')->insert([
             [
-                'id' => 1,
-                'name' => 'Administração',
-                'father_path' => '',
-                'path' => 'admin',
-                'father_order' => 99,
-                'order' => 0,
-                'icon' => 'fa fa-lock',
-                'has_son' => 1,
-                'created_at' => $current_timestamp,
-                'updated_at' => $current_timestamp,
+                'mod_id' => 1,
+                'mod_nome' => 'Administração',
+                'mod_ordem' => 0,
+                'fk_mod_id_modulo' => null
             ],
             [
-                'id' => 2,
-                'name' => 'Grupos de Usuários',
-                'father_path' => 'admin',
-                'path' => 'groups',
-                'father_order' => 99,
-                'order' => 1,
-                'icon' => '',
-                'has_son' => 0,
-                'created_at' => $current_timestamp,
-                'updated_at' => $current_timestamp,
+                'mod_id' => 2,
+                'mod_nome' => 'Grupos de Usuários',
+                'mod_ordem' => 1,
+                'fk_mod_id_modulo' => 1
             ],
             [
-                'id' => 3,
-                'name' => 'Usuários',
-                'father_path' => 'admin',
-                'path' => 'users',
-                'father_order' => 99,
-                'order' => 2,
-                'icon' => '',
-                'has_son' => 0,
-                'created_at' => $current_timestamp,
-                'updated_at' => $current_timestamp,
+                'mod_id' => 3,
+                'mod_nome' => 'Usuários',
+                'mod_ordem' => 2,
+                'fk_mod_id_modulo' => 1
             ],          
         ]);
 
-        DB::table('groups')->insert([
-            'name' => 'Administrador',
-            'created_at' => $current_timestamp,
-            'updated_at' => $current_timestamp,
+        DB::table('grupos')->insert([
+            'gru_nome' => 'Administrador',
         ]);
 
-        $modules = DB::table('modules')->get();
-        $groups = DB::table('groups')->get();
+        $modules = DB::table('modulos')->get();
+        $groups = DB::table('grupos')->get();
         foreach ($modules as $module) {
             foreach ($groups as $group) {
-                DB::table('group_module')->insert([
-                    'group_id' => $group->id, 'module_id' => $module->id,
+                DB::table('grupos_modulos')->insert([
+                    'fk_gru_id_grupo' => $group->gru_id, 'fk_mod_id_modulo' => $module->mod_id,
                 ]);
             }
         }

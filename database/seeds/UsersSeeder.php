@@ -9,15 +9,12 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'name' => 'D3T',
-            'email' => 'd3t@d3t.com.br',
-            'password' => bcrypt('123456'),
-            'created_at' => '2018-02-13 11:28:36',
-            'updated_at' => '2018-02-19 13:59:28',
-            'username' => 'admin',
-            'group_id' => 1,
-            'deleted_at' => null,
+        DB::table('usuarios')->insert([
+            'usu_nome' => 'D3T',
+            'usu_email' => 'd3t@d3t.com.br',
+            'usu_senha' => bcrypt('123456'),
+            'usu_apelido' => 'admin',
+            'fk_gru_id_grupo' => 1,
         ]);
     }
 }
