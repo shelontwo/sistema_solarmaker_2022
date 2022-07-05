@@ -16,27 +16,6 @@ class Group extends Model
       'name',
 	];
 
-	public static function listItems($search = null)
-	{
-  		if($search){
-			$items = DB::table('groups')
-			->select('id','name')
-			->where(function($query) use ($search){
-				$query->orWhere('id','like','%'.$search.'%')
-					->orWhere('name','like','%'.$search.'%');
-			})
-			->orderBy('id','DESC')
-			->paginate();
-		}else{
-			$items = DB::table('groups')
-			->select('id','name')
-			->orderBy('id','DESC')
-			->paginate();
-		}
-
-		return $items;
-	}
-
 	/**
 	 * The events that belong to the usergroup.
 	 */
@@ -51,46 +30,5 @@ class Group extends Model
 	public function users()
 	{
 		return $this->hasMany(User::class);
-	}
-
-	/**
-	 * Generate the menu to the group
-	 */
-	public function menu()
-	{
-		$modules = $this->belongsToMany(Module::class, 'group_module')->orderBy('father_order')->orderBy('order')->get();
-
-		$menuFathers = [];
-		foreach ($modules as $key => $value) {
-			if(strlen($value->father_path) == 0){
-				$value->submodules = [];
-				array_push($menuFathers, $value);
-			}
-		}
-
-		$submodules = [];
-		foreach ($modules as $key => $value) {
-			if (strlen($value->father_path) > 0) {
-				if(in_array($value->father_path, array_keys($submodules)))
-				{
-					array_push($submodules[$value->father_path], $value);
-				}
-				else
-				{
-					$submodules[$value->father_path] = [$value];
-				}
-			}
-		}
-
-		foreach ($menuFathers as $key => $value) {
-			if($value->has_son){
-				if(isset($submodules[$value->path]))
-					$menuFathers[$key]->submodules = $submodules[$value->path];
-				else
-					unset($menuFathers[$key]);
-			}
-		}
-
-		return $menuFathers;
 	}
 }

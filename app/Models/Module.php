@@ -9,8 +9,8 @@ class Module extends Model
 {
     public static function getModules(){
     	return (new static)::whereRaw('LENGTH(father_path) = 0 OR father_path IS NULL ')
-    			->orderBy('father_order','ASC')
-    			->get();
+            ->orderBy('father_order','ASC')
+            ->get();
     }
     
 	/**

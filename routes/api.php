@@ -11,7 +11,7 @@
 |
  */
 
-Route::middleware('cors')->group(function () {
+Route::middleware(['cors', 'logs'])->group(function () {
     Route::prefix('user')->group(function () {
         Route::post('login', 'Api\AuthController@login')->name('auth.login');
         Route::post('register', 'Api\AuthController@register')->name('auth.register');
@@ -23,7 +23,3 @@ Route::middleware('cors')->group(function () {
         });
     });
 });
-
-// Route::middleware('logs')->group(function () {
-    
-// });

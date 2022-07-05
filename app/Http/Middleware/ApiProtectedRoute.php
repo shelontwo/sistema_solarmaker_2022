@@ -18,7 +18,7 @@ class ApiProtectedRoute
     public function handle($request, Closure $next)
     {
         if (!auth()->user()) {
-            return response()->json(['status' => 'Token inválido'], 401);
+            return response()->json(['status' => 'Token inválido'], 401, [], JSON_UNESCAPED_UNICODE);
         }
         return $next($request);
     }
