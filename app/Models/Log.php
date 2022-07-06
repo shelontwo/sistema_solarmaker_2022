@@ -29,6 +29,10 @@ class Log extends Model
         'log_ip_address'
     ];
 
+    protected $hidden = [
+        'log_id',
+    ];
+
     protected static function boot()
     {
         parent::boot();

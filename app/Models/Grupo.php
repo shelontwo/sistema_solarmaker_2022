@@ -21,6 +21,10 @@ class Grupo extends Model
       	'gru_nome'
 	];
 
+	protected $hidden = [
+        'gru_id',
+    ];
+
 	protected static function boot()
     {
         parent::boot();
