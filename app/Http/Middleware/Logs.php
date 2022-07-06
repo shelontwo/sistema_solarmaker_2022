@@ -46,7 +46,7 @@ class Logs
         $user = auth()->user();
 
         Log::create([
-            'fk_usu_id_usuario' => $user ? $user->id : null,
+            'fk_usu_id_usuario' => $user ? $user->usu_id : null,
             'log_url' => $request->path(),
             'log_method' => $request->method(),
             'log_request_json' => addslashes($request_json),
