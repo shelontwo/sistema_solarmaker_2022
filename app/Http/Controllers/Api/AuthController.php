@@ -14,7 +14,7 @@ class AuthController extends Controller
 {
 	public function login(Request $request)
 	{
-		$credentials = $request->only('usu_email', 'usu_senha');
+		$credentials = $request->only('usu_email', 'password');
 		
 		$validacao = $this->validaCamposLogin($credentials);
 
@@ -23,7 +23,6 @@ class AuthController extends Controller
         }
 
         $token = auth('api')->attempt($credentials);
-        dd($token);
         if (!$token) {
             return response()->json([
                 'status' => 'error',
@@ -32,7 +31,7 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
-        $user->update(['token' => $token]);
+        $user->update(['usu_token' => $token]);
         
         return response()->json([
                 'status' => 'success',
@@ -49,7 +48,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255',
             'usu_email' => 'required|string|email|max:255|unique:users',
-            'usu_senha' => 'required|string|min:6',
+            'password' => 'required|string|min:6',
             'fk_group_id' => 'required|integer'
         ]);
 
@@ -57,7 +56,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'username' => $request->username,
             'usu_email' => $request->email,
-            'usu_senha' => Hash::make($request->password),
+            'password' => Hash::make($request->password),
             'fk_group_id' => $request->fk_group_id,
         ]);
 
@@ -75,12 +74,11 @@ class AuthController extends Controller
 
     public function logout()
     {
-        Auth::logout(true);
-        Auth::invalidate(true);
-        // Auth::attempt($credentials);
+        auth('api')->logout();
+
         return response()->json([
             'status' => 'success',
-            'message' => '',
+            'message' => 'Successfully logged out',
         ]);
     }
 
@@ -100,7 +98,7 @@ class AuthController extends Controller
     {
         $validacao = [
             'usu_email' => 'required|string',
-            'usu_senha' => 'required|string',
+            'password' => 'required|string',
         ];
 
         $mensagem = [

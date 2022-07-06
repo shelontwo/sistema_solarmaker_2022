@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\Log;
-use Illuminate\Support\Facades\Auth;
+
 class Logs
 {
   /**
@@ -46,13 +46,13 @@ class Logs
         $user = auth()->user();
 
         Log::create([
-            'fk_user_id' => $user ? $user->id : null,
-            'url' => $request->path(),
-            'method' => $request->method(),
-            'request_json' => addslashes($request_json),
-            'response_json' => "" . addslashes($response_json),
-            'status' => $response->getStatusCode(),
-            'ip_address' => $request->getClientIps()[0],
+            'fk_usu_id_usuario' => $user ? $user->id : null,
+            'log_url' => $request->path(),
+            'log_method' => $request->method(),
+            'log_request_json' => addslashes($request_json),
+            'log_response_json' => "" . addslashes($response_json),
+            'log_status' => $response->getStatusCode(),
+            'log_ip_address' => $request->getClientIps()[0],
         ]);
     }
 }
