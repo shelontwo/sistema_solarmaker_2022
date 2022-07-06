@@ -15,7 +15,7 @@ class UsersSeeder extends Seeder
             'uuid_usu_id' => Str::uuid()->toString(),
             'usu_nome' => 'D3T',
             'usu_email' => 'd3t@d3t.com.br',
-            'usu_senha' => bcrypt('123456'),
+            'password' => bcrypt('123456'),
             'usu_apelido' => 'admin',
             'fk_gru_id_grupo' => 1,
         ]);

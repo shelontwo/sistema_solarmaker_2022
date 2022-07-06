@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -14,7 +14,7 @@ class Usuario extends Authenticatable implements JWTSubject
 {
     use Notifiable, SoftDeletes;
 
-    protected $primaryKey = 'gru_id';
+    protected $primaryKey = 'usu_id';
 
     protected $table = 'usuarios';
 
@@ -29,14 +29,14 @@ class Usuario extends Authenticatable implements JWTSubject
         'usu_nome',
         'usu_apelido',
         'usu_email',
-        'usu_senha',
+        'password',
         'fk_gru_id_grupo',
         'usu_imagem',
         'usu_token'
     ];
 
     protected $hidden = [
-        'usu_senha'
+        'password'
     ];
 
     protected static function boot()
