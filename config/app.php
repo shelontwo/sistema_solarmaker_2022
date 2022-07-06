@@ -169,6 +169,7 @@ return [
         /*
          * Package Service Providers...
          */
+        PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider::class,
         // SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         /*
          * Application Service Providers...

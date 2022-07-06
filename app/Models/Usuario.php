@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-class User extends Authenticatable implements JWTSubject
+
+class Usuario extends Authenticatable implements JWTSubject
 {
     use Notifiable, SoftDeletes;
-
 
     protected $primaryKey = 'gru_id';
 
