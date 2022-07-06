@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'api',
-        'passwords' => 'usuarios',
+        'guard' => 'web',
+        'passwords' => 'users',
     ],
 
     /*
@@ -31,20 +31,14 @@ return [
     | users are actually retrieved out of your database or other storage
     | mechanisms used by this application to persist your user's data.
     |
-    | Supported: "session", "token"
+    | Supported: "session"
     |
     */
 
     'guards' => [
         'web' => [
-            'driver' => 'jwt',
+            'driver' => 'session',
             'provider' => 'users',
-        ],
-
-        'api' => [
-            'driver' => 'jwt',
-            'provider' => 'users',
-            'hash' => false,
         ],
     ],
 
@@ -68,8 +62,9 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Usuario::class,
+            'model' => App\Models\User::class,
         ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -85,7 +80,7 @@ return [
     | than one user table or model in the application and you want to have
     | separate password reset settings based on the specific user types.
     |
-    | The expire time is the number of minutes that the reset token should be
+    | The expire time is the number of minutes that each reset token will be
     | considered valid. This security feature keeps tokens short-lived so
     | they have less time to be guessed. You may change this as needed.
     |
@@ -93,7 +88,7 @@ return [
 
     'passwords' => [
         'users' => [
-            'provider' => 'usuarios',
+            'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
