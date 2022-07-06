@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Carbon\Carbon;
-use App\User;
+use App\Models\Usuario;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,12 +14,7 @@ class AuthController extends Controller
 {
 	public function login(Request $request)
 	{
-		$request->validate([
-			'email' => 'required|string|email',
-			'password' => 'required|string'
-		]);
-		
-		$credentials = $request->only('email', 'password');
+		$credentials = $request->only('usu_email', 'usu_senha');
 		
 		$validacao = $this->validaCamposLogin($credentials);
 
@@ -27,7 +22,8 @@ class AuthController extends Controller
             return response()->json($validacao->errors(), 406);
         }
 
-        $token = Auth::attempt($credentials);
+        $token = auth('api')->attempt($credentials);
+        dd($token);
         if (!$token) {
             return response()->json([
                 'status' => 'error',
@@ -52,16 +48,16 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'usu_email' => 'required|string|email|max:255|unique:users',
+            'usu_senha' => 'required|string|min:6',
             'fk_group_id' => 'required|integer'
         ]);
 
-        $user = User::create([
+        $user = Usuario::create([
             'name' => $request->name,
             'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'usu_email' => $request->email,
+            'usu_senha' => Hash::make($request->password),
             'fk_group_id' => $request->fk_group_id,
         ]);
 
@@ -103,8 +99,8 @@ class AuthController extends Controller
 	private function validaCamposLogin($data)
     {
         $validacao = [
-            'email' => 'required|string',
-            'password' => 'required|string',
+            'usu_email' => 'required|string',
+            'usu_senha' => 'required|string',
         ];
 
         $mensagem = [

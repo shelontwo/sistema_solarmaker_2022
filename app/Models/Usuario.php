@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +16,7 @@ class Usuario extends Authenticatable implements JWTSubject
 
     protected $primaryKey = 'gru_id';
 
-    protected $table = 'grupos';
+    protected $table = 'usuarios';
 
     const CREATED_AT = 'usu_criado_em';
 
