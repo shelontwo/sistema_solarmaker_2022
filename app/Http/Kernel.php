@@ -53,12 +53,12 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'cors' => \App\Http\Middleware\Cors::class,
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-        'autenticate' => \App\Http\Middleware\ValidateToken::class,
-        'logs' => \App\Http\Middleware\Logs::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'cors' => \App\Http\Middleware\Cors::class,
+        'autenticate' => \App\Http\Middleware\ValidateToken::class,
+        'logs' => \App\Http\Middleware\Logs::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
