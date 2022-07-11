@@ -40,12 +40,12 @@ class AuthController extends Controller
         $user->update(['usu_token' => $token]);
         
         return response()->json([
-                'status' => 'success',
-                'usuario' => $user,
-                'authorization' => [
-                    'token' => $token,
-                ]
-            ]);
+            'status' => 'success',
+            'usuario' => $user,
+            'authorization' => [
+                'token' => $token,
+            ]
+        ]);
 	}
 
 	public function novoUsuario(Request $request)
@@ -108,6 +108,7 @@ class AuthController extends Controller
             'usu_nome' => 'required|string|max:255',
             'usu_apelido' => 'required|string|max:255|unique:usuarios',
             'usu_email' => 'required|string|email|max:255|unique:usuarios',
+            'usu_tipo' => 'required|integer|between:1,3',
             'password' => 'required|string|min:6',
             'uuid_gru_id' => 'required|string'
         ];

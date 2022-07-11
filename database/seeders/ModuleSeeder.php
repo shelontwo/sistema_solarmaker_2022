@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 class ModuleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run()
     {
         $current_timestamp = date('Y-m-d h:i:s');

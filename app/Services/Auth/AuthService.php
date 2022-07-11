@@ -29,6 +29,7 @@ class AuthService
                 'usu_nome' => $this->data['usu_nome'],
                 'usu_apelido' => $this->data['usu_apelido'],
                 'usu_email' => $this->data['usu_email'],
+                'usu_tipo' => $this->data['usu_tipo'],
                 'password' => Hash::make($this->data['password']),
                 'fk_gru_id_grupo' => $fk_gru_id_grupo,
             ]);
