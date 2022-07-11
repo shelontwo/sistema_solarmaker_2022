@@ -2,63 +2,70 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Services\Integrador\IntegradorService;
 
 class IntegradorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    protected $integradorService;
+
+    public function __construct(
+        IntegradorService $integradorService
+    )
     {
-        //
+        $this->integradorService = $integradorService;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function index(Request $request)
+    {
+        $data = $this->integradorService->indice($request);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $logout['msg']],400);
+    }
+
     public function store(Request $request)
     {
-        //
-    }
+        $this->integradorService->defineData($request->all());
+        $data = $this->integradorService->novoIntegrador();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']], isset($data['http_status']) ? $data['http_status'] : 400);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+   
+    public function show($uuid)
     {
-        //
+        $data = $this->integradorService->listIntegrador($uuid);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $logout['msg']],400);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+   
+    public function update(Request $request)
     {
-        //
+        $this->integradorService->defineData($request->all());
+        $data = $this->integradorService->atualizaIntegrador();
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']], 400);
+    }
+   
+    public function destroy($uuid)
+    {
+        $data = $this->integradorService->removeIntegrador($uuid);
+
+        if ($data['status']) {
+            return response()->json(['msg' => $data['msg']]);
+        }
+        return response()->json(['msg' => $logout['msg']],400);
     }
 }

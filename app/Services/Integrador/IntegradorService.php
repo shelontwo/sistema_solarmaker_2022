@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Services\Distribuidor;
+namespace App\Services\Integrador;
 
 use Exception;
+use App\Models\Integrador;
 use App\Models\Distribuidor;
 use App\Helpers\HelperBuscaId;
 use Illuminate\Support\Facades\Validator;
 
-class DistribuidorService
+class IntegradorService
 {
     protected $data;
 
@@ -21,24 +22,24 @@ class DistribuidorService
     public function indice($request)
     {
         try {
-            $distribuidores = Distribuidor::select('uuid_dis_id', 'dis_nome')->paginate();
-            return ['status' => true, 'data' => $distribuidores];
+            $integradores = Integrador::select('uuid_int_id', 'int_nome')->paginate();
+            return ['status' => true, 'data' => $integradores];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function listDistribuidor($uuid)
+    public function listIntegrador($uuid)
     {
         try {
-            $distribuidor = Distribuidor::where('uuid_dis_id', $uuid)->first();
-            return ['status' => true, 'data' => $distribuidor];
+            $integrador = Integrador::where('uuid_int_id', $uuid)->first();
+            return ['status' => true, 'data' => $integrador];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function novoDistribuidor()
+    public function novoIntegrador()
     {
         try {
             $validacao = $this->validaCampos();
@@ -47,17 +48,20 @@ class DistribuidorService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
-            $distribuidor = Distribuidor::create([
-                'dis_nome' => $this->data['dis_nome'],
+            $fk_dis_id_distribuidor = HelperBuscaId::buscaId($this->data['uuid_dis_id'], Distribuidor::class);
+            
+            $integrador = Integrador::create([
+                'int_nome' => $this->data['int_nome'],
+                'fk_dis_id_distribuidor' => $fk_dis_id_distribuidor,
             ]);
 
-            return ['status' => true, 'data' => $distribuidor];
+            return ['status' => true, 'data' => $integrador];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function atualizaDistribuidor()
+    public function atualizaIntegrador()
     {
         try {
             $validacao = $this->validaCampos(true);
@@ -66,20 +70,20 @@ class DistribuidorService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
-            $distribuidor = Distribuidor::find(HelperBuscaId::buscaId($this->data['uuid_dis_id'], Distribuidor::class));
-            $distribuidor->update($this->data);
+            $integrador = Integrador::find(HelperBuscaId::buscaId($this->data['uuid_int_id'], Integrador::class));
+            $integrador->update($this->data);
 
-            return ['status' => true, 'data' => $distribuidor];
+            return ['status' => true, 'data' => $integrador];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function removeDistribuidor($uuid)
+    public function removeIntegrador($uuid)
     {
         try {
-            $distribuidor = Distribuidor::where('uuid_dis_id', $uuid)->delete();
-            return ['status' => true, 'msg' => $distribuidor ? 'Distribuidor removido com sucesso' : 'Erro ao remover distribuidor'];
+            $integrador = Integrador::where('uuid_int_id', $uuid)->delete();
+            return ['status' => true, 'msg' => $integrador ? 'Integrador removido com sucesso' : 'Erro ao remover integrador'];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
@@ -88,13 +92,14 @@ class DistribuidorService
     private function validaCampos($update = false)
     {
         $validacao = [
-            'dis_nome' => 'required|string|max:255',
+            'int_nome' => 'required|string|max:255',
+            'uuid_dis_id' => 'required|string|max:255'
         ];
 
         if ($update) {
             $validacao = [
-                'uuid_dis_id' => 'required|string|max:255',
-                'dis_nome' => 'string|max:255',
+                'uuid_int_id' => 'required|string|max:255',
+                'int_nome' => 'string|max:255',
             ];
         }
 
