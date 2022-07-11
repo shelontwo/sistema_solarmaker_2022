@@ -22,11 +22,10 @@ Route::middleware(['cors', 'logs'])->group(function () {
     Route::prefix('usuario')->group(function () {
         Route::post('login', 'Api\AuthController@login');
         Route::post('novo', 'Api\AuthController@novoUsuario');
+        Route::post('logout', 'Api\AuthController@logout');
     });
     
     Route::middleware('auth.jwt')->group(function () {
-        Route::post('usuario/logout', 'Api\AuthController@logout');
-
         Route::get('logs', 'Api\LogController@index');
         Route::get('logs/{log}', 'Api\LogController@listaLog');
     });

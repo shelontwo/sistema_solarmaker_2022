@@ -9,13 +9,6 @@ use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
 class ApiProtectedRoute extends BaseMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Request  $request
-     * @param Closure $next
-     * @return mixed
-     */
     public function handle($request, Closure $next)
     {
         try {

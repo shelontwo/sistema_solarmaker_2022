@@ -7,22 +7,25 @@ use App\Models\Log;
 
 class Logs
 {
-  /**
-   * Handle an incoming request.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @param  \Closure  $next
-   * @return mixed
-   */
-  public function handle($request, Closure $next)
-  {
-    return $next($request);
-  }
+    public $user;
 
-  public function terminate($request, $response)
+    public function handle($request, Closure $next)
     {
+        $user = auth()->user();
+        $request->usu_id = $user ? $user->usu_id : null;
+        return $next($request);
+    }
+
+    public function terminate($request, $response)
+    {
+
         if ($request->path() == 'api/logs') {
             return true;
+        }
+
+        if ($request->path() == 'api/usuario/login') {
+            $user = auth()->user();
+            $request->usu_id = $user ? $user->usu_id : null;
         }
 
         $request_json = '';
@@ -43,10 +46,8 @@ class Logs
             }
         }
         
-        $user = auth()->user();
-
         Log::create([
-            'fk_usu_id_usuario' => $user ? $user->usu_id : null,
+            'fk_usu_id_usuario' => $request->usu_id,
             'log_url' => $request->path(),
             'log_method' => $request->method(),
             'log_request_json' => addslashes($request_json),
