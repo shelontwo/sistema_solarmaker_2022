@@ -4,6 +4,7 @@ namespace App\Services\Log;
 
 use Exception;
 use App\Models\Log;
+
 class LogService
 {
     protected $data;

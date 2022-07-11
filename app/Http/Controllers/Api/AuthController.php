@@ -49,7 +49,7 @@ class AuthController extends Controller
         ]);
 	}
 
-	public function novoUsuario(Request $request)
+	public function store(Request $request)
     {
         $validacao = $this->validaCamposCadastro($request->all());
 		
@@ -96,11 +96,7 @@ class AuthController extends Controller
             'password' => 'required|string',
         ];
 
-        $mensagem = [
-            'required' => 'O campo `:attribute` é obrigatório.',
-        ];
-
-        return Validator::make($data, $validacao, $mensagem);
+        return Validator::make($data, $validacao);
     }
 
     private function validaCamposCadastro($data)
@@ -114,11 +110,6 @@ class AuthController extends Controller
             'uuid_gru_id' => 'required|string'
         ];
 
-        $mensagem = [
-            'required' => 'O campo `:attribute` é obrigatório.',
-            'unique' => '`:attribute` já está sendo utilizado.',
-        ];
-
-        return Validator::make($data, $validacao, $mensagem);
+        return Validator::make($data, $validacao);
     }
 }

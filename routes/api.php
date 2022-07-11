@@ -21,12 +21,21 @@ Route::middleware(['cors', 'logs'])->group(function () {
 
     Route::prefix('usuario')->group(function () {
         Route::post('login', 'Api\AuthController@login');
-        Route::post('novo', 'Api\AuthController@novoUsuario');
         Route::post('logout', 'Api\AuthController@logout');
+        Route::post('novo', 'Api\AuthController@store');
     });
     
     Route::middleware('auth.jwt')->group(function () {
         Route::get('logs', 'Api\LogController@index');
-        Route::get('logs/{log}', 'Api\LogController@listaLog');
+        Route::get('logs/{log}', 'Api\LogController@show');
+
+        Route::prefix('distribuidores')->group(function () {
+            Route::get('/', 'Api\DistribuidorController@index');
+            Route::get('{uuid}', 'Api\DistribuidorController@show');
+            Route::post('novo', 'Api\DistribuidorController@store');
+            Route::put('edita', 'Api\DistribuidorController@update');
+            Route::delete('remove/{uuid}', 'Api\DistribuidorController@destroy');
+        });
+
     });
 });

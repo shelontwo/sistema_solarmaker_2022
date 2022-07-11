@@ -27,7 +27,7 @@ class LogController extends Controller
         return response()->json(['msg' => $logout['msg']],400);
     }
     
-    public function listaLog($uuid)
+    public function show($uuid)
     {
         $data = $this->logService->listaLog($uuid);
 
