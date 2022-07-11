@@ -12,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Usuario extends Authenticatable implements JWTSubject
 {
-    use Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes;
 
     protected $primaryKey = 'usu_id';
 
@@ -33,6 +33,8 @@ class Usuario extends Authenticatable implements JWTSubject
         'usu_email',
         'password',
         'fk_gru_id_grupo',
+        'fk_dis_id_distribuidor',
+        'fk_int_id_integrador',
         'usu_imagem',
         'usu_token'
     ];
