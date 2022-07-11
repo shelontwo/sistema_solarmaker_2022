@@ -20,7 +20,7 @@ class AuthController extends Controller
 
 	public function login(Request $request)
 	{
-		$credentials = $request->only('usu_email', 'password');
+		$credentials = $request->only('usu_apelido', 'usu_email', 'password');
 		
 		$validacao = $this->validaCamposLogin($credentials);
 
@@ -90,7 +90,8 @@ class AuthController extends Controller
 	private function validaCamposLogin($data)
     {
         $validacao = [
-            'usu_email' => 'required|string',
+            'usu_apelido' => 'required_if:usu_email,""|string',
+            'usu_email' => 'required_if:usu_apelido,""|string',
             'password' => 'required|string',
         ];
 
@@ -105,7 +106,7 @@ class AuthController extends Controller
     {
         $validacao = [
             'usu_nome' => 'required|string|max:255',
-            'usu_apelido' => 'required|string|max:255',
+            'usu_apelido' => 'required|string|max:255|unique:usuarios',
             'usu_email' => 'required|string|email|max:255|unique:usuarios',
             'password' => 'required|string|min:6',
             'uuid_gru_id' => 'required|string'
@@ -113,6 +114,7 @@ class AuthController extends Controller
 
         $mensagem = [
             'required' => 'O campo `:attribute` é obrigatório.',
+            'unique' => '`:attribute` já está sendo utilizado.',
         ];
 
         return Validator::make($data, $validacao, $mensagem);
