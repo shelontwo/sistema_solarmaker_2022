@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Modulo extends Model
 {
+    use HasFactory;
+    
     protected $primaryKey = 'mod_id';
 
     protected $table = 'modulos';

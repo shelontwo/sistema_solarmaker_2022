@@ -9,7 +9,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        $this->call(ModuleSeeder::class);
-        $this->call(UsersSeeder::class);
+        $this->call(GruposSeeder::class);
+        $this->call(UsuariosSeeder::class);
     }
 }
