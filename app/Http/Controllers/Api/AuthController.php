@@ -32,7 +32,7 @@ class AuthController extends Controller
         if (!$token) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Unauthorized',
+                'message' => 'Dados de login incorretos',
             ], 401);
         }
 
@@ -71,7 +71,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Successfully logged out',
+            'message' => 'Deslogado com sucesso',
         ]);
     }
 
