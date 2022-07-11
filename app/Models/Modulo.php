@@ -12,6 +12,8 @@ class Modulo extends Model
 
     protected $table = 'modulos';
 
+    const UUID = 'uuid_mod_id';
+
     const CREATED_AT = 'mod_criado_em';
 
     const UPDATED_AT = 'mod_atualizado_em';

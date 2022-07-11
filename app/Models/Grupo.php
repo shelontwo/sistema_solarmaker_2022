@@ -12,6 +12,8 @@ class Grupo extends Model
 
     protected $table = 'grupos';
 
+    const UUID = 'uuid_gru_id';
+
     const CREATED_AT = 'gru_criado_em';
 
     const UPDATED_AT = 'gru_atualizado_em';

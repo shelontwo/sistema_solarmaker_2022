@@ -14,6 +14,8 @@ class Log extends Model
 
     protected $table = 'logs';
 
+    const UUID = 'uuid_log_id';
+
     const CREATED_AT = 'log_criado_em';
 
     const UPDATED_AT = 'log_atualizado_em';

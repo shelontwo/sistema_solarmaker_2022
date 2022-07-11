@@ -21,7 +21,7 @@ Route::middleware(['cors', 'logs'])->group(function () {
 
     Route::prefix('usuario')->group(function () {
         Route::post('login', 'Api\AuthController@login');
-        Route::post('novo', 'Api\AuthController@register');
+        Route::post('novo', 'Api\AuthController@novoUsuario');
     });
     
     Route::middleware('auth.jwt')->group(function () {

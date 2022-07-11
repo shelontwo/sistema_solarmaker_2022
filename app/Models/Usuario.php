@@ -18,6 +18,8 @@ class Usuario extends Authenticatable implements JWTSubject
 
     protected $table = 'usuarios';
 
+    const UUID = 'uuid_usu_id';
+    
     const CREATED_AT = 'usu_criado_em';
 
     const UPDATED_AT = 'usu_atualizado_em';
@@ -44,8 +46,8 @@ class Usuario extends Authenticatable implements JWTSubject
     {
         parent::boot();
 
-        static::creating(function (User $USER) {
-            $USER->uuid_usu_id = Str::uuid()->toString();
+        static::creating(function (Usuario $usuario) {
+            $usuario->uuid_usu_id = Str::uuid()->toString();
         });
     }
 

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Log;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Services\Log\LogService;
+use App\Http\Controllers\Controller;
 class LogController extends Controller
 {
     protected $logService;
