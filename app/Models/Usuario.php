@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Grupo;
 use Illuminate\Support\Str;
+use App\Models\Distribuidor;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -74,12 +76,19 @@ class Usuario extends Authenticatable implements JWTSubject
     {
         return [];
     }
-
-    /*
-    * Get the group that the user belongs to
-    */
-    public function group()
+    
+    public function grupo()
     {
-        return $this->belongsTo(Group::class, 'fk_group_id');
+        return $this->belongsTo(Grupo::class, 'fk_gru_id_grupo')->select('uuid_gru_id', 'gru_id', 'gru_nome');
+    }
+
+    public function distribuidor()
+    {
+        return $this->belongsTo(Distribuidor::class, 'fk_dis_id_distribuidor')->select('uuid_dis_id', 'dis_id', 'dis_nome');
+    }
+
+    public function integrador()
+    {
+        return $this->belongsTo(Integrador::class, 'fk_int_id_integrador')->select('uuid_int_id', 'int_id', 'int_nome');
     }
 }

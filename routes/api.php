@@ -25,7 +25,16 @@ Route::middleware(['cors', 'logs'])->group(function () {
     });
     
     Route::middleware('auth.jwt')->group(function () {
-        Route::post('usuario/novo', 'Api\AuthController@store');
+        Route::prefix('usuarios')->group(function () {
+            Route::get('/', 'Api\UsuarioController@index');
+            Route::get('master', 'Api\UsuarioController@master');
+            Route::get('distribuidor/{uuid}', 'Api\UsuarioController@distribuidor');
+            Route::get('integrador/{uuid}', 'Api\UsuarioController@integrador');
+            Route::get('{uuid}', 'Api\UsuarioController@show');
+            Route::post('novo', 'Api\UsuarioController@store');
+            Route::put('edita', 'Api\UsuarioController@update');
+            Route::delete('remove/{uuid}', 'Api\UsuarioController@destroy');
+        });
         
         Route::get('logs', 'Api\LogController@index');
         Route::get('logs/{log}', 'Api\LogController@show');
