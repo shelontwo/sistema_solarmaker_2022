@@ -22,7 +22,9 @@ class IntegradorService
     public function indice($request)
     {
         try {
-            $integradores = Integrador::select('uuid_int_id', 'int_nome')->paginate();
+            $integradores = Integrador::select('uuid_int_id', 'int_nome');
+            $integradores = $request->input('page') ? $integradores->paginate() : $integradores->get();
+
             return ['status' => true, 'data' => $integradores];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];

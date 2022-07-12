@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services\Distribuidor;
+namespace App\Services\Grupo;
 
 use Exception;
-use App\Models\Distribuidor;
+use App\Models\Grupo;
 use App\Helpers\HelperBuscaId;
 use Illuminate\Support\Facades\Validator;
 
-class DistribuidorService
+class GrupoService
 {
     protected $data;
 
@@ -21,26 +21,26 @@ class DistribuidorService
     public function indice($request)
     {
         try {
-            $distribuidores = Distribuidor::select('uuid_dis_id', 'dis_nome');
-            $distribuidores = $request->input('page') ? $distribuidores->paginate() : $distribuidores->get();
-            
-            return ['status' => true, 'data' => $distribuidores];
+            $grupos = Grupo::select('uuid_gru_id', 'gru_nome');
+            $grupos = $request->input('page') ? $grupos->paginate() : $grupos->get();
+                
+            return ['status' => true, 'data' => $grupos];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function listDistribuidor($uuid)
+    public function listGrupo($uuid)
     {
         try {
-            $distribuidor = Distribuidor::where('uuid_dis_id', $uuid)->first();
-            return ['status' => true, 'data' => $distribuidor];
+            $grupo = Grupo::where('uuid_gru_id', $uuid)->first();
+            return ['status' => true, 'data' => $grupo];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function novoDistribuidor()
+    public function novoGrupo()
     {
         try {
             $validacao = $this->validaCampos();
@@ -49,17 +49,17 @@ class DistribuidorService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
-            $distribuidor = Distribuidor::create([
-                'dis_nome' => $this->data['dis_nome'],
+            $grupo = Grupo::create([
+                'gru_nome' => $this->data['gru_nome'],
             ]);
 
-            return ['status' => true, 'data' => $distribuidor];
+            return ['status' => true, 'data' => $grupo];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function atualizaDistribuidor()
+    public function atualizaGrupo()
     {
         try {
             $validacao = $this->validaCampos(true);
@@ -68,20 +68,20 @@ class DistribuidorService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
-            $distribuidor = Distribuidor::find(HelperBuscaId::buscaId($this->data['uuid_dis_id'], Distribuidor::class));
-            $distribuidor->update($this->data);
+            $grupo = Grupo::find(HelperBuscaId::buscaId($this->data['uuid_gru_id'], Grupo::class));
+            $grupo->update($this->data);
 
-            return ['status' => true, 'data' => $distribuidor];
+            return ['status' => true, 'data' => $grupo];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function removeDistribuidor($uuid)
+    public function removeGrupo($uuid)
     {
         try {
-            $distribuidor = Distribuidor::where('uuid_dis_id', $uuid)->delete();
-            return ['status' => true, 'msg' => $distribuidor ? 'Distribuidor removido com sucesso' : 'Erro ao remover distribuidor'];
+            $grupo = Grupo::where('uuid_gru_id', $uuid)->delete();
+            return ['status' => true, 'msg' => $grupo ? 'Grupo removido com sucesso' : 'Erro ao remover grupo'];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
@@ -90,13 +90,13 @@ class DistribuidorService
     private function validaCampos($update = false)
     {
         $validacao = [
-            'dis_nome' => 'required|string|max:255',
+            'gru_nome' => 'required|string|max:255',
         ];
 
         if ($update) {
             $validacao = [
-                'uuid_dis_id' => 'required|string|max:255',
-                'dis_nome' => 'string|max:255',
+                'uuid_gru_id' => 'required|string|max:255',
+                'gru_nome' => 'string|max:255',
             ];
         }
 

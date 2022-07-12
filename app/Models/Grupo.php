@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Grupo extends Model
 {
-	use HasFactory;
+	use HasFactory, SoftDeletes;
 	
 	protected $primaryKey = 'gru_id';
 
@@ -20,6 +21,8 @@ class Grupo extends Model
     const CREATED_AT = 'gru_criado_em';
 
     const UPDATED_AT = 'gru_atualizado_em';
+	
+    const DELETED_AT = 'gru_deletado_em';
 
 	protected $fillable = [
 		'uuid_gru_id',

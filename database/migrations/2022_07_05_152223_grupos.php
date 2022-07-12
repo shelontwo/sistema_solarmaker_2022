@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('gru_nome');
             $table->timestamp('gru_criado_em')->useCurrent();
             $table->timestamp('gru_atualizado_em')->useCurrent()->useCurrentOnUpdate();
+            $table->softDeletes($column = 'gru_deletado_em');
         });
     }
 

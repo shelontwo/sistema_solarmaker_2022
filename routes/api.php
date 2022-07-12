@@ -30,6 +30,14 @@ Route::middleware(['cors', 'logs'])->group(function () {
         Route::get('logs', 'Api\LogController@index');
         Route::get('logs/{log}', 'Api\LogController@show');
 
+        Route::prefix('grupos')->group(function () {
+            Route::get('/', 'Api\GrupoController@index');
+            Route::get('{uuid}', 'Api\GrupoController@show');
+            Route::post('novo', 'Api\GrupoController@store');
+            Route::put('edita', 'Api\GrupoController@update');
+            Route::delete('remove/{uuid}', 'Api\GrupoController@destroy');
+        });
+
         Route::prefix('distribuidores')->group(function () {
             Route::get('/', 'Api\DistribuidorController@index');
             Route::get('{uuid}', 'Api\DistribuidorController@show');
