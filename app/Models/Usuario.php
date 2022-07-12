@@ -36,6 +36,8 @@ class Usuario extends Authenticatable implements JWTSubject
         'fk_dis_id_distribuidor',
         'fk_int_id_integrador',
         'usu_imagem',
+        'usu_data_referencia',
+        'usu_dias_expiracao',
         'usu_token'
     ];
 

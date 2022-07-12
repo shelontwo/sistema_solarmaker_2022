@@ -23,6 +23,8 @@ return new class extends Migration
             $table->foreign('fk_gru_id_grupo')->references('gru_id')->on('grupos');
             $table->foreign('fk_dis_id_distribuidor')->references('dis_id')->on('distribuidores');
             $table->foreign('fk_int_id_integrador')->references('int_id')->on('integradores');
+            $table->timestamp('usu_data_referencia')->nullable();
+            $table->smallInteger('usu_dias_expiracao')->nullable();
             $table->timestamp('usu_criado_em')->useCurrent();
             $table->timestamp('usu_atualizado_em')->useCurrent()->useCurrentOnUpdate();
             $table->softDeletes($column = 'usu_deletado_em');

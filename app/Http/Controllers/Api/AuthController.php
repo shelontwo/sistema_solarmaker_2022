@@ -102,12 +102,14 @@ class AuthController extends Controller
     private function validaCamposCadastro($data)
     {
         $validacao = [
-            'usu_nome' => 'required|string|max:255',
             'usu_apelido' => 'required|string|max:255|unique:usuarios',
-            'usu_email' => 'required|string|email|max:255|unique:usuarios',
-            'usu_tipo' => 'required|integer|between:1,3',
+            'usu_nome' => 'required|string|max:255',
+            'usu_email' => 'string|email|max:255|unique:usuarios',
             'password' => 'required|string|min:6',
-            'uuid_gru_id' => 'required|string'
+            'usu_data_referencia' => 'date',
+            'usu_dias_expiracao' => 'integer',
+            'uuid_gru_id' => 'required|string',
+            'uuid_int_id' => 'required|string'
         ];
 
         return Validator::make($data, $validacao);

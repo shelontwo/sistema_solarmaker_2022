@@ -5,6 +5,7 @@ namespace App\Services\Auth;
 use Exception;
 use App\Models\Grupo;
 use App\Models\Usuario;
+use App\Models\Integrador;
 use App\Helpers\HelperBuscaId;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -23,16 +24,12 @@ class AuthService
     public function novoUsuario()
     {
         try {
-            $fk_gru_id_grupo = HelperBuscaId::buscaId($this->data['uuid_gru_id'], Grupo::class);
+            $this->data['fk_gru_id_grupo'] = HelperBuscaId::buscaId($this->data['uuid_gru_id'], Grupo::class);
+            $this->data['fk_int_id_integrador'] = HelperBuscaId::buscaId($this->data['uuid_int_id'], Integrador::class);
+            $this->data['password'] = Hash::make($this->data['password']);
+            unset($this->data['uuid_gru_id']);
 
-            $user = Usuario::create([
-                'usu_nome' => $this->data['usu_nome'],
-                'usu_apelido' => $this->data['usu_apelido'],
-                'usu_email' => $this->data['usu_email'],
-                'usu_tipo' => $this->data['usu_tipo'],
-                'password' => Hash::make($this->data['password']),
-                'fk_gru_id_grupo' => $fk_gru_id_grupo,
-            ]);
+            $user = Usuario::create($this->data);
 
             return ['status' => true, 'data' => $user];
         } catch (\Exception $error) {
