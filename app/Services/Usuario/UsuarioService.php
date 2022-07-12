@@ -168,8 +168,8 @@ class UsuarioService
             'usu_data_referencia' => 'date|nullable',
             'usu_dias_expiracao' => 'integer|nullable',
             'uuid_gru_id' => 'required|string|uuid',
-            'uuid_int_id' => 'string|uuid',
-            'uuid_dis_id' => 'string|uuid',
+            'uuid_int_id' => 'uuid',
+            'uuid_dis_id' => 'uuid',
         ];
 
         if ($update) {
@@ -180,7 +180,7 @@ class UsuarioService
                 'password' => 'required|string|min:6',
                 'usu_data_referencia' => 'date|nullable',
                 'usu_dias_expiracao' => 'integer|nullable',
-                'uuid_gru_id' => 'required|string|uuid',
+                'uuid_gru_id' => 'required|uuid',
             ];
         }
 

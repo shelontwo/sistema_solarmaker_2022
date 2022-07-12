@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use App\Models\Distribuidor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,6 +27,19 @@ class Integrador extends Model
 	protected $fillable = [
 		'uuid_int_id',
       	'int_nome',
+        'int_nome_fantasia',
+        'int_cnpj',
+        'int_cep',
+        'int_uf',
+        'int_cidade',
+        'int_bairro',
+        'int_rua',
+        'int_numero',
+        'int_complemento',
+        'int_telefone',
+        'int_celular',
+        'int_email',
+        'int_imagem',
         'fk_dis_id_distribuidor'
 	];
 
@@ -40,5 +54,10 @@ class Integrador extends Model
         static::creating(function (Integrador $integrador) {
             $integrador->uuid_int_id = Str::uuid()->toString();
         });
+    }
+
+    public function distribuidor()
+    {
+        return $this->belongsTo(Distribuidor::class, 'fk_dis_id_distribuidor')->select('uuid_dis_id', 'dis_id', 'dis_nome');
     }
 }

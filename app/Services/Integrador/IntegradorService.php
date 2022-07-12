@@ -22,7 +22,7 @@ class IntegradorService
     public function indice($request)
     {
         try {
-            $integradores = Integrador::select('uuid_int_id', 'int_nome');
+            $integradores = Integrador::select('uuid_int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular');
             $integradores = $request->input('page') ? $integradores->paginate() : $integradores->get();
 
             return ['status' => true, 'data' => $integradores];
@@ -34,7 +34,9 @@ class IntegradorService
     public function listIntegrador($uuid)
     {
         try {
-            $integrador = Integrador::where('uuid_int_id', $uuid)->first();
+            $integrador = Integrador::where('uuid_int_id', $uuid)
+                ->with('distribuidor')
+                ->first();
             return ['status' => true, 'data' => $integrador];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
@@ -50,12 +52,9 @@ class IntegradorService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
-            $fk_dis_id_distribuidor = HelperBuscaId::buscaId($this->data['uuid_dis_id'], Distribuidor::class);
+            $this->data['fk_dis_id_distribuidor'] = HelperBuscaId::buscaId($this->data['uuid_dis_id'], Distribuidor::class);
             
-            $integrador = Integrador::create([
-                'int_nome' => $this->data['int_nome'],
-                'fk_dis_id_distribuidor' => $fk_dis_id_distribuidor,
-            ]);
+            $integrador = Integrador::create($this->data);
 
             return ['status' => true, 'data' => $integrador];
         } catch (\Exception $error) {
@@ -95,14 +94,24 @@ class IntegradorService
     {
         $validacao = [
             'int_nome' => 'required|string|max:255',
-            'uuid_dis_id' => 'required|string|max:255'
+            'int_nome_fantasia' => 'required|string|max:255',
+            'int_cnpj' => 'string|max:255',
+            'int_cep' => 'string|max:255',
+            'int_uf' => 'string|max:255',
+            'int_cidade' => 'string|max:255',
+            'int_bairro' => 'string|max:255',
+            'int_rua' => 'string|max:255',
+            'int_numero' => 'integer',
+            'int_complemento' => 'string|max:255',
+            'int_telefone' => 'string|max:255',
+            'int_celular' => 'string|max:255',
+            'int_email' => 'string|email|max:255',
+            'uuid_dis_id' => 'required|uuid'
         ];
 
         if ($update) {
-            $validacao = [
-                'uuid_int_id' => 'required|string|max:255',
-                'int_nome' => 'string|max:255',
-            ];
+            $validacao['uuid_int_id'] = 'required|uuid';
+            unset($validacao['uuid_dis_id']);
         }
 
         return Validator::make($this->data, $validacao);
