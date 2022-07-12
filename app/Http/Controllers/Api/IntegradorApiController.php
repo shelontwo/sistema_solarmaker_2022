@@ -4,22 +4,22 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\Distribuidor\DistribuidorService;
+use App\Services\Integrador\ApiService;
 
-class DistribuidorController extends Controller
+class IntegradorApiController extends Controller
 {
-    protected $distribuidorService;
+    protected $apiService;
 
     public function __construct(
-        DistribuidorService $distribuidorService
+        ApiService $apiService
     )
     {
-        $this->distribuidorService = $distribuidorService;
+        $this->apiService = $apiService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request, $uuidIntegrador)
     {
-        $data = $this->distribuidorService->indice($request);
+        $data = $this->apiService->indice($request, $uuidIntegrador);
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -27,10 +27,10 @@ class DistribuidorController extends Controller
         return response()->json(['msg' => $data['msg']],400);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $uuidIntegrador)
     {
-        $this->distribuidorService->defineData($request->all());
-        $data = $this->distribuidorService->novoDistribuidor();
+        $this->apiService->defineData($request->all());
+        $data = $this->apiService->novaApi($uuidIntegrador);
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -38,9 +38,9 @@ class DistribuidorController extends Controller
         return response()->json(['msg' => $data['msg']], isset($data['http_status']) ? $data['http_status'] : 400);
     }
    
-    public function show($uuid)
+    public function show($uuidIntegrador, $uuidApi)
     {
-        $data = $this->distribuidorService->listDistribuidor($uuid);
+        $data = $this->apiService->listApi($uuidIntegrador, $uuidApi);
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -50,8 +50,8 @@ class DistribuidorController extends Controller
    
     public function update(Request $request)
     {
-        $this->distribuidorService->defineData($request->all());
-        $data = $this->distribuidorService->atualizaDistribuidor();
+        $this->apiService->defineData($request->all());
+        $data = $this->apiService->atualizaApi();
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -59,9 +59,9 @@ class DistribuidorController extends Controller
         return response()->json(['msg' => $data['msg']], 400);
     }
    
-    public function destroy($uuid)
+    public function destroy($uuidIntegrador, $uuidApi)
     {
-        $data = $this->distribuidorService->removeDistribuidor($uuid);
+        $data = $this->apiService->removeApi($uuidIntegrador, $uuidApi);
 
         if ($data['status']) {
             return response()->json(['msg' => $data['msg']]);

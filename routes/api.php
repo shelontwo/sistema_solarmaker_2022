@@ -62,6 +62,14 @@ Route::middleware(['cors', 'logs'])->group(function () {
             Route::post('novo', 'Api\IntegradorController@store');
             Route::put('edita', 'Api\IntegradorController@update');
             Route::delete('remove/{uuid}', 'Api\IntegradorController@destroy');
+            
+            Route::prefix('{uuidIntegrador}/api')->group(function () {
+                Route::get('/', 'Api\IntegradorApiController@index');
+                Route::get('{uuidApi}', 'Api\IntegradorApiController@show');
+                Route::post('novo', 'Api\IntegradorApiController@store');
+                Route::put('edita', 'Api\IntegradorApiController@update');
+                Route::delete('remove/{uuid}', 'Api\IntegradorApiController@destroy');
+            });
         });
     });
 });

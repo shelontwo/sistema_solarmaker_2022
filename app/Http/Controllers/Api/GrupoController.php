@@ -24,7 +24,7 @@ class GrupoController extends Controller
         if ($data['status']) {
             return response()->json($data['data']);
         }
-        return response()->json(['msg' => $logout['msg']],400);
+        return response()->json(['msg' => $data['msg']],400);
     }
 
     public function store(Request $request)
@@ -45,7 +45,7 @@ class GrupoController extends Controller
         if ($data['status']) {
             return response()->json($data['data']);
         }
-        return response()->json(['msg' => $logout['msg']],400);
+        return response()->json(['msg' => $data['msg']],400);
     }
    
     public function update(Request $request)
@@ -66,6 +66,6 @@ class GrupoController extends Controller
         if ($data['status']) {
             return response()->json(['msg' => $data['msg']]);
         }
-        return response()->json(['msg' => $logout['msg']],400);
+        return response()->json(['msg' => $data['msg']],400);
     }
 }
