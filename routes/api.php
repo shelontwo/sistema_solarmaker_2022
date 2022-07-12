@@ -57,6 +57,7 @@ Route::middleware(['cors', 'logs'])->group(function () {
 
         Route::prefix('integradores')->group(function () {
             Route::get('/', 'Api\IntegradorController@index');
+            Route::get('distribuidor/{uuid}', 'Api\IntegradorController@distribuidor');
             Route::get('{uuid}', 'Api\IntegradorController@show');
             Route::post('novo', 'Api\IntegradorController@store');
             Route::put('edita', 'Api\IntegradorController@update');

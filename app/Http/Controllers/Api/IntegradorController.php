@@ -27,6 +27,16 @@ class IntegradorController extends Controller
         return response()->json(['msg' => $logout['msg']],400);
     }
 
+    public function distribuidor(Request $request, $uuid)
+    {
+        $data = $this->integradorService->listIntegradoresDistribuidor($request, $uuid);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $logout['msg']],400);
+    }
+
     public function store(Request $request)
     {
         $this->integradorService->defineData($request->all());

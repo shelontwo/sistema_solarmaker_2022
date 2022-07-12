@@ -31,6 +31,21 @@ class IntegradorService
         }
     }
 
+    public function listIntegradoresDistribuidor($request, $uuid)
+    {
+        try {
+            $fk_dis_id_distribuidor = HelperBuscaId::buscaId($uuid, Distribuidor::class);
+
+            $integradores = Integrador::select('uuid_int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular')
+                ->where('fk_dis_id_distribuidor', $fk_dis_id_distribuidor);
+            $integradores = $request->input('page') ? $integradores->paginate() : $integradores->get();
+
+            return ['status' => true, 'data' => $integradores];
+        } catch (\Exception $error) {
+            return ['status' => false, 'msg' => $error->getMessage()];
+        }
+    }
+
     public function listIntegrador($uuid)
     {
         try {
