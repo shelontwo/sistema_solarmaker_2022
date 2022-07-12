@@ -21,7 +21,7 @@ class DistribuidorService
     public function indice($request)
     {
         try {
-            $distribuidores = Distribuidor::select('uuid_dis_id', 'dis_nome');
+            $distribuidores = Distribuidor::select('uuid_dis_id', 'dis_nome', 'dis_nome_fantasia', 'dis_telefone', 'dis_celular');
             $distribuidores = $request->input('page') ? $distribuidores->paginate() : $distribuidores->get();
             
             return ['status' => true, 'data' => $distribuidores];
@@ -49,9 +49,7 @@ class DistribuidorService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
-            $distribuidor = Distribuidor::create([
-                'dis_nome' => $this->data['dis_nome'],
-            ]);
+            $distribuidor = Distribuidor::create($this->data);
 
             return ['status' => true, 'data' => $distribuidor];
         } catch (\Exception $error) {
@@ -91,13 +89,22 @@ class DistribuidorService
     {
         $validacao = [
             'dis_nome' => 'required|string|max:255',
+            'dis_nome_fantasia' => 'required|string|max:255',
+            'dis_cnpj' => 'string|max:255',
+            'dis_cep' => 'string|max:255',
+            'dis_uf' => 'string|max:255',
+            'dis_cidade' => 'string|max:255',
+            'dis_bairro' => 'string|max:255',
+            'dis_rua' => 'string|max:255',
+            'dis_numero' => 'integer',
+            'dis_complemento' => 'string|max:255',
+            'dis_telefone' => 'string|max:255',
+            'dis_celular' => 'string|max:255',
+            'dis_email' => 'string|email|max:255'
         ];
 
         if ($update) {
-            $validacao = [
-                'uuid_dis_id' => 'required|string|max:255',
-                'dis_nome' => 'string|max:255',
-            ];
+            $validacao['uuid_dis_id'] = 'required|uuid';
         }
 
         return Validator::make($this->data, $validacao);

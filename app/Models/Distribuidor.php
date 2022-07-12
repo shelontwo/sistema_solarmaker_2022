@@ -25,7 +25,20 @@ class Distribuidor extends Model
 
 	protected $fillable = [
 		'uuid_dis_id',
-      	'dis_nome'
+      	'dis_nome',
+        'dis_nome_fantasia',
+        'dis_cnpj',
+        'dis_cep',
+        'dis_uf',
+        'dis_cidade',
+        'dis_bairro',
+        'dis_rua',
+        'dis_numero',
+        'dis_complemento',
+        'dis_telefone',
+        'dis_celular',
+        'dis_email',
+        'dis_imagem'
 	];
 
 	protected $hidden = [
@@ -39,5 +52,11 @@ class Distribuidor extends Model
         static::creating(function (Distribuidor $distribuidor) {
             $distribuidor->uuid_dis_id = Str::uuid()->toString();
         });
+    }
+
+    public function integradores()
+    {
+        return $this->hasMany(Integrador::class, 'fk_dis_id_distribuidor', 'dis_id')
+            ->select('uuid_int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular');
     }
 }
