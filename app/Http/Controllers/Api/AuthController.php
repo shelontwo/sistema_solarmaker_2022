@@ -106,10 +106,11 @@ class AuthController extends Controller
             'usu_nome' => 'required|string|max:255',
             'usu_email' => 'string|email|max:255|unique:usuarios',
             'password' => 'required|string|min:6',
-            'usu_data_referencia' => 'date',
-            'usu_dias_expiracao' => 'integer',
-            'uuid_gru_id' => 'required|string',
-            'uuid_int_id' => 'required|string'
+            'usu_data_referencia' => 'date|nullable',
+            'usu_dias_expiracao' => 'integer|nullable',
+            'uuid_gru_id' => 'required|string|uuid',
+            'uuid_int_id' => 'string|uuid',
+            'uuid_dis_id' => 'string|uuid',
         ];
 
         return Validator::make($data, $validacao);
