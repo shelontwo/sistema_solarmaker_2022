@@ -87,5 +87,16 @@ Route::middleware(['cors', 'logs'])->group(function () {
                 Route::delete('remove/{uuid}', 'Api\IntegradorClienteController@destroy');
             });
         });
+
+        Route::prefix('chamados')->group(function () {
+            Route::get('/', 'Api\ChamadoController@index');
+            Route::get('cliente/{uuid}', 'Api\ChamadoController@cliente');
+            Route::get('distribuidor/{uuid}', 'Api\ChamadoController@distribuidor');
+            Route::get('integrador/{uuid}', 'Api\ChamadoController@integrador');
+            Route::get('{uuid}', 'Api\ChamadoController@show');
+            Route::post('novo', 'Api\ChamadoController@store');
+            Route::post('edita', 'Api\ChamadoController@update');
+            Route::delete('remove/{uuid}', 'Api\ChamadoController@destroy');
+        });
     });
 });

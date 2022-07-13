@@ -90,17 +90,17 @@ class DistribuidorService
         $validacao = [
             'dis_nome' => 'required|string|max:255',
             'dis_nome_fantasia' => 'required|string|max:255',
-            'dis_cnpj' => 'string|max:255',
-            'dis_cep' => 'string|max:255',
-            'dis_uf' => 'string|max:255',
-            'dis_cidade' => 'string|max:255',
-            'dis_bairro' => 'string|max:255',
-            'dis_rua' => 'string|max:255',
-            'dis_numero' => 'integer',
-            'dis_complemento' => 'string|max:255',
-            'dis_telefone' => 'string|max:255',
-            'dis_celular' => 'string|max:255',
-            'dis_email' => 'string|email|max:255'
+            'dis_cnpj' => 'string|max:255|nullable',
+            'dis_cep' => 'string|max:255|nullable',
+            'dis_uf' => 'string|max:255|nullable',
+            'dis_cidade' => 'string|max:255|nullable',
+            'dis_bairro' => 'string|max:255|nullable',
+            'dis_rua' => 'string|max:255|nullable',
+            'dis_numero' => 'string|max:255|nullable',
+            'dis_complemento' => 'string|max:255|nullable',
+            'dis_telefone' => 'string|max:255|nullable',
+            'dis_celular' => 'string|max:255|nullable',
+            'dis_email' => 'string|email|max:255|nullable',
         ];
 
         if ($update) {

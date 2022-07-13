@@ -165,13 +165,13 @@ class UsuarioService
         $validacao = [
             'usu_apelido' => 'required|string|max:255|unique:usuarios',
             'usu_nome' => 'required|string|max:255',
-            'usu_email' => 'string|email|max:255|unique:usuarios',
+            'usu_email' => 'string|email|max:255|unique:usuarios|nullable',
             'password' => 'required|string|min:6',
             'usu_data_referencia' => 'date|nullable',
             'usu_dias_expiracao' => 'integer|nullable',
             'uuid_gru_id' => 'required|string|uuid',
-            'uuid_int_id' => 'uuid',
-            'uuid_dis_id' => 'uuid',
+            'uuid_int_id' => 'uuid|nullable',
+            'uuid_dis_id' => 'uuid|nullable',
         ];
 
         if ($update) {

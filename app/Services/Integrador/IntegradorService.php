@@ -110,17 +110,17 @@ class IntegradorService
         $validacao = [
             'int_nome' => 'required|string|max:255',
             'int_nome_fantasia' => 'required|string|max:255',
-            'int_cnpj' => 'string|max:255',
-            'int_cep' => 'string|max:255',
-            'int_uf' => 'string|max:255',
-            'int_cidade' => 'string|max:255',
-            'int_bairro' => 'string|max:255',
-            'int_rua' => 'string|max:255',
-            'int_numero' => 'integer',
-            'int_complemento' => 'string|max:255',
-            'int_telefone' => 'string|max:255',
-            'int_celular' => 'string|max:255',
-            'int_email' => 'string|email|max:255',
+            'int_cnpj' => 'string|max:255|nullable',
+            'int_cep' => 'string|max:255|nullable',
+            'int_uf' => 'string|max:255|nullable',
+            'int_cidade' => 'string|max:255|nullable',
+            'int_bairro' => 'string|max:255|nullable',
+            'int_rua' => 'string|max:255|nullable',
+            'int_numero' => 'string|max:255|nullable',
+            'int_complemento' => 'string|max:255|nullable',
+            'int_telefone' => 'string|max:255|nullable',
+            'int_celular' => 'string|max:255|nullable',
+            'int_email' => 'string|email|max:255|nullable',
             'uuid_dis_id' => 'required|uuid'
         ];
 

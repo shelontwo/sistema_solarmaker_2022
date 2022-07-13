@@ -56,4 +56,9 @@ class Integrador extends Model
     {
         return $this->belongsTo(Distribuidor::class, 'fk_dis_id_distribuidor')->select('uuid_dis_id', 'dis_id', 'dis_nome');
     }
+
+    public function clientes()
+    {
+        return $this->hasMany(Cliente::class, 'fk_int_id_integrador')->select('uuid_cli_id', 'cli_id', 'cli_nome');
+    }
 }

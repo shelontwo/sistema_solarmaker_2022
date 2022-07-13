@@ -53,6 +53,6 @@ class Distribuidor extends Model
     public function integradores()
     {
         return $this->hasMany(Integrador::class, 'fk_dis_id_distribuidor', 'dis_id')
-            ->select('uuid_int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular');
+            ->select('uuid_int_id', 'int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular');
     }
 }

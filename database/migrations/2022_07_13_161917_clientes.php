@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('cli_cidade', 150)->nullable();
             $table->string('cli_bairro', 150)->nullable();
             $table->string('cli_rua')->nullable();
-            $table->smallInteger('cli_numero')->nullable();
+            $table->string('cli_numero', 50)->nullable();
             $table->string('cli_complemento')->nullable();
             $table->string('cli_telefone', 20)->nullable();
             $table->string('cli_celular', 20)->nullable();

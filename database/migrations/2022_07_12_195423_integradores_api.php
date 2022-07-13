@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('ina_usuario', 100);
             $table->string('ina_api');
             $table->string('ina_senha');
-            $table->string('ina_token');
+            $table->string('ina_token')->nullable();
             $table->unsignedInteger('fk_int_id_integrador');
             $table->foreign('fk_int_id_integrador')->references('int_id')->on('integradores');
             $table->timestamp('ina_criado_em')->useCurrent();

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
 use App\Models\Integrador;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -50,5 +50,10 @@ class Cliente extends Model
         static::creating(function (Cliente $cliente) {
             $cliente->uuid_cli_id = Str::uuid()->toString();
         });
+    }
+
+    public function integrador()
+    {
+        return $this->belongsTo(Integrador::class, 'fk_int_id_integrador')->select('uuid_int_id', 'int_id', 'int_nome');
     }
 }

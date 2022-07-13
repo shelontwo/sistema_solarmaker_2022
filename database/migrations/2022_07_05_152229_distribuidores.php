@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('dis_cidade', 150)->nullable();
             $table->string('dis_bairro', 150)->nullable();
             $table->string('dis_rua')->nullable();
-            $table->smallInteger('dis_numero')->nullable();
+            $table->string('dis_numero', 50)->nullable();
             $table->string('dis_complemento')->nullable();
             $table->string('dis_telefone', 20)->nullable();
             $table->string('dis_celular', 20)->nullable();

@@ -100,7 +100,7 @@ class ApiService
             'ina_usuario' => 'required|string|max:255',
             'ina_api' => 'required|string|max:255',
             'ina_senha' => 'required|string|max:255',
-            'ina_token' => 'string|max:255',
+            'ina_token' => 'string|max:255|nullable',
         ];
 
         if ($update) {
