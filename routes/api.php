@@ -98,5 +98,13 @@ Route::middleware(['cors', 'logs'])->group(function () {
             Route::post('edita', 'Api\ChamadoController@update');
             Route::delete('remove/{uuid}', 'Api\ChamadoController@destroy');
         });
+
+        Route::prefix('concessionarias')->group(function () {
+            Route::get('/', 'Api\ConcessionariaController@index');
+            Route::get('{uuid}', 'Api\ConcessionariaController@show');
+            Route::post('novo', 'Api\ConcessionariaController@store');
+            Route::post('edita', 'Api\ConcessionariaController@update');
+            Route::delete('remove/{uuid}', 'Api\ConcessionariaController@destroy');
+        });
     });
 });
