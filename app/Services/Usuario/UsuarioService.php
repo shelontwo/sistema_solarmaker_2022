@@ -26,7 +26,7 @@ class UsuarioService
     public function indice($request)
     {
         try {
-            $usuarios = Usuario::select('uuid_usu_id', 'usu_nome', 'usu_apelido', 'fk_gru_id_grupo')->with('grupo');
+            $usuarios = Usuario::select('uuid_usu_id', 'usu_id', 'usu_nome', 'usu_apelido', 'usu_email', 'fk_gru_id_grupo')->with('grupo');
             $usuarios = $request->input('page') ? $usuarios->paginate() : $usuarios->get();
                 
             return ['status' => true, 'data' => $usuarios];
@@ -38,7 +38,7 @@ class UsuarioService
     public function listUsuariosMaster($request)
     {
         try {
-            $usuarios = Usuario::select('uuid_usu_id', 'usu_nome', 'usu_apelido', 'fk_gru_id_grupo')
+            $usuarios = Usuario::select('uuid_usu_id', 'usu_id', 'usu_nome', 'usu_apelido', 'usu_email', 'fk_gru_id_grupo')
                 ->whereNull('fk_dis_id_distribuidor')
                 ->whereNull('fk_int_id_integrador')
                 ->with('grupo');
@@ -54,7 +54,7 @@ class UsuarioService
     {
         try {
             $fk_dis_id_distribuidor = HelperBuscaId::buscaId($uuid, Distribuidor::class);
-            $usuarios = Usuario::select('uuid_usu_id', 'usu_nome', 'usu_apelido', 'fk_gru_id_grupo')
+            $usuarios = Usuario::select('uuid_usu_id', 'usu_id', 'usu_nome', 'usu_apelido', 'usu_email', 'fk_gru_id_grupo')
                 ->where('fk_dis_id_distribuidor', $fk_dis_id_distribuidor)
                 ->with('grupo');
             $usuarios = $request->input('page') ? $usuarios->paginate() : $usuarios->get();
@@ -69,7 +69,7 @@ class UsuarioService
     {
         try {
             $fk_int_id_integrador = HelperBuscaId::buscaId($uuid, Integrador::class);
-            $usuarios = Usuario::select('uuid_usu_id', 'usu_nome', 'usu_apelido', 'fk_gru_id_grupo')
+            $usuarios = Usuario::select('uuid_usu_id', 'usu_id', 'usu_nome', 'usu_apelido', 'usu_email', 'fk_gru_id_grupo')
                 ->where('fk_int_id_integrador', $fk_int_id_integrador)
                 ->with('grupo');
             $usuarios = $request->input('page') ? $usuarios->paginate() : $usuarios->get();
@@ -136,7 +136,9 @@ class UsuarioService
             }
 
             $this->data['fk_gru_id_grupo'] = HelperBuscaId::buscaId($this->data['uuid_gru_id'], Grupo::class);
-            $this->data['password'] = Hash::make($this->data['password']);
+            if (!empty($this->data['password'])) {
+                $this->data['password'] = Hash::make($this->data['password']);
+            }
             unset($this->data['uuid_gru_id']);
             
             $usuario = Usuario::find($usuarioId);
@@ -177,7 +179,7 @@ class UsuarioService
                 'usu_apelido' => 'string|max:255|unique:usuarios',
                 'usu_nome' => 'string|max:255',
                 'usu_email' => 'string|email|max:255|unique:usuarios',
-                'password' => 'required|string|min:6',
+                'password' => 'string|min:6',
                 'usu_data_referencia' => 'date|nullable',
                 'usu_dias_expiracao' => 'integer|nullable',
                 'uuid_gru_id' => 'required|uuid',
