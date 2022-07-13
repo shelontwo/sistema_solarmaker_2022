@@ -22,7 +22,7 @@ class IntegradorService
     public function indice($request)
     {
         try {
-            $integradores = Integrador::select('uuid_int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular');
+            $integradores = Integrador::select('uuid_int_id', 'int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular');
             $integradores = $request->input('page') ? $integradores->paginate() : $integradores->get();
 
             return ['status' => true, 'data' => $integradores];
@@ -36,7 +36,7 @@ class IntegradorService
         try {
             $fk_dis_id_distribuidor = HelperBuscaId::buscaId($uuid, Distribuidor::class);
 
-            $integradores = Integrador::select('uuid_int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular')
+            $integradores = Integrador::select('uuid_int_id', 'int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular')
                 ->where('fk_dis_id_distribuidor', $fk_dis_id_distribuidor);
             $integradores = $request->input('page') ? $integradores->paginate() : $integradores->get();
 

@@ -21,7 +21,7 @@ class DistribuidorService
     public function indice($request)
     {
         try {
-            $distribuidores = Distribuidor::select('uuid_dis_id', 'dis_nome', 'dis_nome_fantasia', 'dis_telefone', 'dis_celular');
+            $distribuidores = Distribuidor::select('uuid_dis_id', 'dis_id', 'dis_nome', 'dis_nome_fantasia', 'dis_telefone', 'dis_celular');
             $distribuidores = $request->input('page') ? $distribuidores->paginate() : $distribuidores->get();
             
             return ['status' => true, 'data' => $distribuidores];
