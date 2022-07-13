@@ -29,10 +29,6 @@ class Grupo extends Model
       	'gru_nome'
 	];
 
-	protected $hidden = [
-        'gru_id',
-    ];
-
 	protected static function boot()
     {
         parent::boot();
@@ -42,19 +38,8 @@ class Grupo extends Model
         });
     }
 
-	/**
-	 * The events that belong to the usergroup.
-	 */
 	public function modules()
 	{
 		return $this->belongsToMany(Module::class, 'group_module');
-	}
-
-	/**
-	 * The users that belong to the usergroup
-	 */
-	public function users()
-	{
-		return $this->hasMany(User::class);
 	}
 }
