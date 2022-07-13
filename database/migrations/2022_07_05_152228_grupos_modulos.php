@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('grupos_modulos', function (Blueprint $table) {
             $table->increments('gmo_id');
-            $table->uuid('uuid_gmo_id');
             $table->unsignedInteger('fk_mod_id_modulo');
             $table->foreign('fk_mod_id_modulo')->references('mod_id')->on('modulos');
             $table->unsignedInteger('fk_gru_id_grupo');

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Modulo;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
@@ -38,8 +39,8 @@ class Grupo extends Model
         });
     }
 
-	public function modules()
-	{
-		return $this->belongsToMany(Module::class, 'group_module');
-	}
+    public function modulos()
+    {
+        return $this->belongsToMany(Modulo::class, 'grupos_modulos', 'fk_gru_id_grupo', 'fk_mod_id_modulo');
+    }
 }
