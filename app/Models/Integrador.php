@@ -43,10 +43,6 @@ class Integrador extends Model
         'fk_dis_id_distribuidor'
 	];
 
-	protected $hidden = [
-        'int_id',
-    ];
-
 	protected static function boot()
     {
         parent::boot();

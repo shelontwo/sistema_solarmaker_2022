@@ -44,7 +44,6 @@ class Usuario extends Authenticatable implements JWTSubject
     ];
 
     protected $hidden = [
-        'usu_id',
         'password'
     ];
 

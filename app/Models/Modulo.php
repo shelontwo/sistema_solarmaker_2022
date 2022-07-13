@@ -29,10 +29,6 @@ class Modulo extends Model
         'fk_mod_id_modulo'
 	];
 
-    protected $hidden = [
-        'mod_id',
-    ];
-
 	protected static function boot()
     {
         parent::boot();

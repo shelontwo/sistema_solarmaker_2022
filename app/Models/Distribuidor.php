@@ -41,10 +41,6 @@ class Distribuidor extends Model
         'dis_imagem'
 	];
 
-	protected $hidden = [
-        'dis_id',
-    ];
-
 	protected static function boot()
     {
         parent::boot();
