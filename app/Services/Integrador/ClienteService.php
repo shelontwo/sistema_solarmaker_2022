@@ -3,12 +3,13 @@
 namespace App\Services\Integrador;
 
 use Exception;
+use App\Models\Cliente;
 use App\Models\Integrador;
 use App\Models\IntegradorApi;
 use App\Helpers\HelperBuscaId;
 use Illuminate\Support\Facades\Validator;
 
-class ApiService
+class ClienteService
 {
     protected $data;
 
@@ -24,28 +25,29 @@ class ApiService
         try {
             $fk_int_id_integrador = HelperBuscaId::buscaId($uuidIntegrador, Integrador::class);
 
-            $apis = IntegradorApi::where('fk_int_id_integrador', $fk_int_id_integrador);
-            $apis = $request->input('page') ? $apis->paginate() : $apis->get();
+            $clientes = Cliente::select('uuid_cli_id', 'cli_id', 'cli_nome', 'cli_cidade', 'cli_bairro', 'cli_uf', 'cli_usuario')
+                ->where('fk_int_id_integrador', $fk_int_id_integrador);
+            $clientes = $request->input('page') ? $clientes->paginate() : $clientes->get();
 
-            return ['status' => true, 'data' => $apis];
+            return ['status' => true, 'data' => $clientes];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function listApi($uuidIntegrador, $uuidApi)
+    public function listCliente($uuidIntegrador, $uuidCliente)
     {
         try {
             $fk_int_id_integrador = HelperBuscaId::buscaId($uuidIntegrador, Integrador::class);
 
-            $api = IntegradorApi::where('uuid_ina_id', $uuidApi)->where('fk_int_id_integrador', $fk_int_id_integrador)->first();
-            return ['status' => true, 'data' => $api];
+            $cliente = Cliente::where('uuid_cli_id', $uuidCliente)->where('fk_int_id_integrador', $fk_int_id_integrador)->first();
+            return ['status' => true, 'data' => $cliente];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function novaApi($uuidIntegrador)
+    public function novoCliente($uuidIntegrador)
     {
         try {
             $validacao = $this->validaCampos();
@@ -56,15 +58,15 @@ class ApiService
 
             $this->data['fk_int_id_integrador'] = HelperBuscaId::buscaId($uuidIntegrador, Integrador::class);
             
-            $api = IntegradorApi::create($this->data);
+            $cliente = Cliente::create($this->data);
 
-            return ['status' => true, 'data' => $api];
+            return ['status' => true, 'data' => $cliente];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function atualizaApi()
+    public function atualizaCliente()
     {
         try {
             $validacao = $this->validaCampos(true);
@@ -73,22 +75,22 @@ class ApiService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
-            $api = IntegradorApi::find(HelperBuscaId::buscaId($this->data['uuid_ina_id'], IntegradorApi::class));
-            $api->update($this->data);
+            $cliente = Cliente::find(HelperBuscaId::buscaId($this->data['uuid_cli_id'], Cliente::class));
+            $cliente->update($this->data);
 
-            return ['status' => true, 'data' => $api];
+            return ['status' => true, 'data' => $cliente];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function removeApi($uuidIntegrador, $uuidApi)
+    public function removeCliente($uuidIntegrador, $uuidCliente)
     {
         try {
             $fk_int_id_integrador = HelperBuscaId::buscaId($uuidIntegrador, Integrador::class);
 
-            $api = IntegradorApi::where('uuid_ina_id', $uuidApi)->where('fk_int_id_integrador', $fk_int_id_integrador)->delete();
-            return ['status' => true, 'msg' => $api ? 'API removida com sucesso' : 'Erro ao remover API'];
+            $cliente = Cliente::where('uuid_cli_id', $uuidCliente)->where('fk_int_id_integrador', $fk_int_id_integrador)->delete();
+            return ['status' => true, 'msg' => $cliente ? 'Cliente removido com sucesso' : 'Erro ao remover cliente'];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
@@ -97,14 +99,24 @@ class ApiService
     private function validaCampos($update = false)
     {
         $validacao = [
-            'ina_usuario' => 'required|string|max:255',
-            'ina_api' => 'required|string|max:255',
-            'ina_senha' => 'required|string|max:255',
-            'ina_token' => 'string|max:255',
+            'cli_nome' => 'required|string|max:255',
+            'cli_cep' => 'string|max:255',
+            'cli_uf' => 'string|max:255',
+            'cli_cidade' => 'string|max:255',
+            'cli_bairro' => 'string|max:255',
+            'cli_rua' => 'string|max:255',
+            'cli_numero' => 'integer',
+            'cli_complemento' => 'string|max:255',
+            'cli_telefone' => 'string|max:255',
+            'cli_celular' => 'string|max:255',
+            'cli_email' => 'string|email|max:255',
+            'cli_usuario' => 'required|string|max:255',
+            'cli_senha' => 'string|max:255',
+            'cli_alterar_senha' => 'boolean',
         ];
 
         if ($update) {
-            $validacao['uuid_ina_id'] = 'required|uuid';
+            $validacao['uuid_cli_id'] = 'required|uuid';
         }
 
         return Validator::make($this->data, $validacao);
