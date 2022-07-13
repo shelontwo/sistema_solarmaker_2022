@@ -32,10 +32,6 @@ class IntegradorApi extends Model
         'fk_int_id_integrador'
 	];
 
-    protected $hidden = [
-        'ina_id',
-    ];
-
 	protected static function boot()
     {
         parent::boot();
