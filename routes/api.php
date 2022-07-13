@@ -106,5 +106,14 @@ Route::middleware(['cors', 'logs'])->group(function () {
             Route::post('edita', 'Api\ConcessionariaController@update');
             Route::delete('remove/{uuid}', 'Api\ConcessionariaController@destroy');
         });
+
+        Route::prefix('inversores')->group(function () {
+            Route::get('/', 'Api\InversorController@index');
+            Route::get('integrador/{uuid}', 'Api\InversorController@integrador');
+            Route::get('{uuid}', 'Api\InversorController@show');
+            Route::post('novo', 'Api\InversorController@store');
+            Route::post('edita', 'Api\InversorController@update');
+            Route::delete('remove/{uuid}', 'Api\InversorController@destroy');
+        });
     });
 });
