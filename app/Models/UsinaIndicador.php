@@ -8,27 +8,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class UsinaProducao extends Model
+class UsinaIndicador extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $primaryKey = 'upr_id';
+    protected $primaryKey = 'uin_id';
 
-    protected $table = 'usinas_producao';
+    protected $table = 'usinas_indicador';
 
-    const UUID = 'uuid_upr_id';
+    const UUID = 'uuid_uin_id';
 
-    const CREATED_AT = 'upr_criado_em';
+    const CREATED_AT = 'uin_criado_em';
 
-    const UPDATED_AT = 'upr_atualizado_em';
+    const UPDATED_AT = 'uin_atualizado_em';
 
-    const DELETED_AT = 'upr_deletado_em';
+    const DELETED_AT = 'uin_deletado_em';
 
 	protected $fillable = [
-		'uuid_upr_id',
-      	'upr_data',
-        'upr_producao',
-        'upr_tipo',
+		'uuid_uin_id',
+      	'uin_data',
+        'uin_campo',
+        'uin_valor',
         'fk_usi_id_usina'
 	];
 
@@ -36,8 +36,8 @@ class UsinaProducao extends Model
     {
         parent::boot();
 
-        static::creating(function (UsinaProducao $usinaProducao) {
-            $usinaProducao->uuid_upr_id = Str::uuid()->toString();
+        static::creating(function (UsinaIndicador $usinaIndicador) {
+            $usinaIndicador->uuid_uin_id = Str::uuid()->toString();
         });
     }
 

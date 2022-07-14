@@ -134,6 +134,14 @@ Route::middleware(['cors', 'logs'])->group(function () {
                 Route::post('edita', 'Api\UsinaProducaoController@update');
                 Route::delete('remove/{uuid}', 'Api\UsinaProducaoController@destroy');
             });
+
+            Route::prefix('{uuidUsina}/indicadores')->group(function () {
+                Route::get('/', 'Api\UsinaIndicadorController@index');
+                Route::get('{uuid}', 'Api\UsinaIndicadorController@show');
+                Route::post('novo', 'Api\UsinaIndicadorController@store');
+                Route::post('edita', 'Api\UsinaIndicadorController@update');
+                Route::delete('remove/{uuid}', 'Api\UsinaIndicadorController@destroy');
+            });
         });
     });
 });
