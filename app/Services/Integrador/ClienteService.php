@@ -5,6 +5,7 @@ namespace App\Services\Integrador;
 use Exception;
 use App\Models\Cliente;
 use App\Models\Integrador;
+use App\Models\Distribuidor;
 use App\Models\IntegradorApi;
 use App\Helpers\HelperBuscaId;
 use Illuminate\Support\Facades\Validator;
@@ -20,11 +21,32 @@ class ClienteService
         return $this;
     }
 
-    public function indice($request, $uuidIntegrador)
+    public function indice($request)
     {
         try {
-            $fk_int_id_integrador = HelperBuscaId::buscaId($uuidIntegrador, Integrador::class);
+            $usuario = auth()->user();
 
+            if ($usuario->fk_int_id_integrador) {
+                return $this->listClientesIntegrador($request, $usuario->fk_int_id_integrador);
+            }
+            if ($usuario->fk_dis_id_distribuidor) {
+                return $this->listClientesDistribuidor($request, $usuario->fk_dis_id_distribuidor);
+            }
+
+            $clientes = Cliente::select('uuid_cli_id', 'cli_id', 'cli_nome', 'cli_cidade', 'cli_bairro', 'cli_uf', 'cli_usuario');
+            $clientes = $request->input('page') ? $clientes->paginate() : $clientes->get();
+
+            return ['status' => true, 'data' => $clientes];
+        } catch (\Exception $error) {
+            return ['status' => false, 'msg' => $error->getMessage()];
+        }
+    }
+
+    public function listClientesIntegrador($request, $uuid)
+    {
+        try {
+            $fk_int_id_integrador = is_integer($uuid) ? $uuid : HelperBuscaId::buscaId($uuid, Integrador::class);
+            
             $clientes = Cliente::select('uuid_cli_id', 'cli_id', 'cli_nome', 'cli_cidade', 'cli_bairro', 'cli_uf', 'cli_usuario')
                 ->where('fk_int_id_integrador', $fk_int_id_integrador);
             $clientes = $request->input('page') ? $clientes->paginate() : $clientes->get();
@@ -35,19 +57,39 @@ class ClienteService
         }
     }
 
-    public function listCliente($uuidIntegrador, $uuidCliente)
+    public function listClientesDistribuidor($request, $uuid)
     {
         try {
-            $fk_int_id_integrador = HelperBuscaId::buscaId($uuidIntegrador, Integrador::class);
+            $distribuidor = Distribuidor::find(is_integer($uuid) ? $uuid : HelperBuscaId::buscaId($uuid, Distribuidor::class));
+            $integradores = $distribuidor->integradores()->get();
 
-            $cliente = Cliente::where('uuid_cli_id', $uuidCliente)->where('fk_int_id_integrador', $fk_int_id_integrador)->first();
+            $integradores_ids = [];
+
+            foreach ($integradores as $integrador) {
+                array_push($integradores_ids, $integrador->int_id);
+            }
+
+            $clientes = Cliente::select('uuid_cli_id', 'cli_id', 'cli_nome', 'cli_cidade', 'cli_bairro', 'cli_uf', 'cli_usuario')
+                ->whereIn('fk_int_id_integrador', $integradores_ids);
+            $clientes = $request->input('page') ? $clientes->paginate() : $clientes->get();
+                
+            return ['status' => true, 'data' => $clientes];
+        } catch (\Exception $error) {
+            return ['status' => false, 'msg' => $error->getMessage()];
+        }
+    }
+
+    public function listCliente($uuid)
+    {
+        try {
+            $cliente = Cliente::where('uuid_cli_id', $uuid)->first();
             return ['status' => true, 'data' => $cliente];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function novoCliente($uuidIntegrador)
+    public function novoCliente()
     {
         try {
             $validacao = $this->validaCampos();
@@ -56,7 +98,7 @@ class ClienteService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
-            $this->data['fk_int_id_integrador'] = HelperBuscaId::buscaId($uuidIntegrador, Integrador::class);
+            $this->data['fk_int_id_integrador'] = HelperBuscaId::buscaId($this->data['uuid_int_id'], Integrador::class);
             
             $cliente = Cliente::create($this->data);
 
@@ -75,6 +117,8 @@ class ClienteService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
+            $this->data['fk_int_id_integrador'] = HelperBuscaId::buscaId($this->data['uuid_int_id'], Integrador::class);
+
             $cliente = Cliente::find(HelperBuscaId::buscaId($this->data['uuid_cli_id'], Cliente::class));
             $cliente->update($this->data);
 
@@ -84,12 +128,10 @@ class ClienteService
         }
     }
 
-    public function removeCliente($uuidIntegrador, $uuidCliente)
+    public function removeCliente($uuid)
     {
         try {
-            $fk_int_id_integrador = HelperBuscaId::buscaId($uuidIntegrador, Integrador::class);
-
-            $cliente = Cliente::where('uuid_cli_id', $uuidCliente)->where('fk_int_id_integrador', $fk_int_id_integrador)->delete();
+            $cliente = Cliente::where('uuid_cli_id', $uuid)->delete();
             return ['status' => true, 'msg' => $cliente ? 'Cliente removido com sucesso' : 'Erro ao remover cliente'];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
@@ -113,6 +155,7 @@ class ClienteService
             'cli_usuario' => 'required|string|max:255|nullable',
             'cli_senha' => 'string|max:255|nullable',
             'cli_alterar_senha' => 'boolean',
+            'uuid_int_id' => 'required|uuid',
         ];
 
         if ($update) {

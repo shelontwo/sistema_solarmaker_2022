@@ -17,9 +17,9 @@ class IntegradorClienteController extends Controller
         $this->clienteService = $clienteService;
     }
 
-    public function index(Request $request, $uuidIntegrador)
+    public function index(Request $request)
     {
-        $data = $this->clienteService->indice($request, $uuidIntegrador);
+        $data = $this->clienteService->indice($request);
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -27,10 +27,30 @@ class IntegradorClienteController extends Controller
         return response()->json(['msg' => $data['msg']],400);
     }
 
-    public function store(Request $request, $uuidIntegrador)
+    public function integrador(Request $request, $uuid)
+    {
+        $data = $this->clienteService->listClientesIntegrador($request, $uuid);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']],400);
+    }
+
+    public function distribuidor(Request $request, $uuid)
+    {
+        $data = $this->clienteService->listClientesDistribuidor($request, $uuid);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']],400);
+    }
+
+    public function store(Request $request)
     {
         $this->clienteService->defineData($request->all());
-        $data = $this->clienteService->novoCliente($uuidIntegrador);
+        $data = $this->clienteService->novoCliente();
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -38,9 +58,9 @@ class IntegradorClienteController extends Controller
         return response()->json(['msg' => $data['msg']], isset($data['http_status']) ? $data['http_status'] : 400);
     }
    
-    public function show($uuidIntegrador, $uuidCliente)
+    public function show($uuid)
     {
-        $data = $this->clienteService->listCliente($uuidIntegrador, $uuidCliente);
+        $data = $this->clienteService->listCliente($uuid);
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -59,9 +79,9 @@ class IntegradorClienteController extends Controller
         return response()->json(['msg' => $data['msg']], 400);
     }
    
-    public function destroy($uuidIntegrador, $uuidCliente)
+    public function destroy($uuid)
     {
-        $data = $this->clienteService->removeCliente($uuidIntegrador, $uuidCliente);
+        $data = $this->clienteService->removeCliente($uuid);
 
         if ($data['status']) {
             return response()->json(['msg' => $data['msg']]);

@@ -79,13 +79,17 @@ Route::middleware(['cors', 'logs'])->group(function () {
                 Route::delete('remove/{uuid}', 'Api\IntegradorApiController@destroy');
             });
 
-            Route::prefix('{uuidIntegrador}/clientes')->group(function () {
-                Route::get('/', 'Api\IntegradorClienteController@index');
-                Route::get('{uuidApi}', 'Api\IntegradorClienteController@show');
-                Route::post('novo', 'Api\IntegradorClienteController@store');
-                Route::post('edita', 'Api\IntegradorClienteController@update');
-                Route::delete('remove/{uuid}', 'Api\IntegradorClienteController@destroy');
-            });
+            
+        });
+
+        Route::prefix('clientes')->group(function () {
+            Route::get('/', 'Api\IntegradorClienteController@index');
+            Route::get('distribuidor/{uuid}', 'Api\IntegradorClienteController@distribuidor');
+            Route::get('integrador/{uuid}', 'Api\IntegradorClienteController@integrador');
+            Route::get('{uuid}', 'Api\IntegradorClienteController@show');
+            Route::post('novo', 'Api\IntegradorClienteController@store');
+            Route::post('edita', 'Api\IntegradorClienteController@update');
+            Route::delete('remove/{uuid}', 'Api\IntegradorClienteController@destroy');
         });
 
         Route::prefix('chamados')->group(function () {
