@@ -41,6 +41,6 @@ class Grupo extends Model
 
     public function modulos()
     {
-        return $this->belongsToMany(Modulo::class, 'grupos_modulos', 'fk_gru_id_grupo', 'fk_mod_id_modulo');
+        return $this->belongsToMany(Modulo::class, 'grupos_modulos', 'fk_gru_id_grupo', 'fk_mod_id_modulo')->select('uuid_mod_id', 'mod_id', 'mod_nome');
     }
 }

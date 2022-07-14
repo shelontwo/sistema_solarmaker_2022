@@ -124,6 +124,16 @@ Route::middleware(['cors', 'logs'])->group(function () {
             Route::post('novo', 'Api\UsinaController@store');
             Route::post('edita', 'Api\UsinaController@update');
             Route::delete('remove/{uuid}', 'Api\UsinaController@destroy');
+
+            Route::prefix('{uuidUsina}/producao')->group(function () {
+                Route::get('/', 'Api\UsinaProducaoController@index');
+                Route::get('diaria', 'Api\UsinaProducaoController@diaria');
+                Route::get('instantanea', 'Api\UsinaProducaoController@instantanea');
+                Route::get('{uuid}', 'Api\UsinaProducaoController@show');
+                Route::post('novo', 'Api\UsinaProducaoController@store');
+                Route::post('edita', 'Api\UsinaProducaoController@update');
+                Route::delete('remove/{uuid}', 'Api\UsinaProducaoController@destroy');
+            });
         });
     });
 });

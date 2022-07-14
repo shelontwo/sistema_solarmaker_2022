@@ -22,7 +22,8 @@ class GrupoService
     public function indice($request)
     {
         try {
-            $grupos = Grupo::select('uuid_gru_id', 'gru_id', 'gru_nome');
+            $grupos = Grupo::select('uuid_gru_id', 'gru_id', 'gru_nome')
+                ->with('modulos');
             $grupos = $request->input('page') ? $grupos->paginate() : $grupos->get();
                 
             return ['status' => true, 'data' => $grupos];
@@ -35,9 +36,7 @@ class GrupoService
     {
         try {
             $grupo = Grupo::where('uuid_gru_id', $uuid)->first();
-            $grupo->gru_modulos = $grupo->modulos()
-                ->select('uuid_mod_id', 'mod_id', 'mod_nome')
-                ->get();
+            $grupo->gru_modulos = $grupo->modulos()->get();
             return ['status' => true, 'data' => $grupo];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
