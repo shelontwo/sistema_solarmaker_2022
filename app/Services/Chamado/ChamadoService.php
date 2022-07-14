@@ -24,6 +24,15 @@ class ChamadoService
     public function indice($request)
     {
         try {
+            $usuario = auth()->user();
+
+            if ($usuario->fk_int_id_integrador) {
+                return $this->listChamadosIntegrador($request, $usuario->fk_int_id_integrador);
+            }
+            if ($usuario->fk_dis_id_distribuidor) {
+                return $this->listChamadosDistribuidor($request, $usuario->fk_dis_id_distribuidor);
+            }
+
             $chamados = Chamado::select('uuid_cha_id', 'cha_id', 'cha_status', 'cha_descricao', 'fk_cli_id_cliente', 'cha_finalizado_em', 'cha_criado_em', 'cha_atualizado_em')
                 ->with('cliente');
             $chamados = $request->input('page') ? $chamados->paginate() : $chamados->get();
@@ -37,7 +46,11 @@ class ChamadoService
     public function listChamadosCliente($request, $uuid)
     {
         try {
-            $fk_cli_id_cliente = HelperBuscaId::buscaId($uuid, Cliente::class);
+            $fk_cli_id_cliente = $uuid;
+
+            if (!is_integer($uuid)) {
+                $fk_cli_id_cliente = HelperBuscaId::buscaId($uuid, Cliente::class);
+            }
             
             $chamados = Chamado::select('uuid_cha_id', 'cha_id', 'cha_status', 'cha_descricao', 'fk_cli_id_cliente', 'cha_finalizado_em', 'cha_criado_em', 'cha_atualizado_em')
                 ->where('fk_cli_id_cliente', $fk_cli_id_cliente)
@@ -53,7 +66,7 @@ class ChamadoService
     public function listChamadosIntegrador($request, $uuid)
     {
         try {
-            $integrador = Integrador::find(HelperBuscaId::buscaId($uuid, Integrador::class));
+            $integrador = Integrador::find(is_integer($uuid) ? $uuid : HelperBuscaId::buscaId($uuid, Integrador::class));
             $clientes = $integrador->clientes()->get();
             
             $clientes_ids = [];
@@ -76,7 +89,7 @@ class ChamadoService
     public function listChamadosDistribuidor($request, $uuid)
     {
         try {
-            $distribuidor = Distribuidor::find(HelperBuscaId::buscaId($uuid, Distribuidor::class));
+            $distribuidor = Distribuidor::find(is_integer($uuid) ? $uuid : HelperBuscaId::buscaId($uuid, Distribuidor::class));
             $integradores = $distribuidor->integradores()->get();
 
             $clientes_ids = [];
