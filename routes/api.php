@@ -115,5 +115,15 @@ Route::middleware(['cors', 'logs'])->group(function () {
             Route::post('edita', 'Api\InversorController@update');
             Route::delete('remove/{uuid}', 'Api\InversorController@destroy');
         });
+
+        Route::prefix('usinas')->group(function () {
+            Route::get('/', 'Api\UsinaController@index');
+            Route::get('integrador/{uuid}', 'Api\UsinaController@integrador');
+            Route::get('cliente/{uuid}', 'Api\UsinaController@cliente');
+            Route::get('{uuid}', 'Api\UsinaController@show');
+            Route::post('novo', 'Api\UsinaController@store');
+            Route::post('edita', 'Api\UsinaController@update');
+            Route::delete('remove/{uuid}', 'Api\UsinaController@destroy');
+        });
     });
 });

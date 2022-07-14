@@ -22,7 +22,8 @@ class IntegradorService
     public function indice($request)
     {
         try {
-            $integradores = Integrador::select('uuid_int_id', 'int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular');
+            $integradores = Integrador::select('uuid_int_id', 'int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular', 'fk_dis_id_distribuidor')
+                ->with('distribuidor');
             $integradores = $request->input('page') ? $integradores->paginate() : $integradores->get();
 
             return ['status' => true, 'data' => $integradores];
@@ -86,6 +87,10 @@ class IntegradorService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
+            if (!empty($this->data['uuid_dis_id'])) {
+                $this->data['fk_dis_id_distribuidor'] = HelperBuscaId::buscaId($this->data['uuid_dis_id'], Distribuidor::class);
+            }
+            
             $integrador = Integrador::find(HelperBuscaId::buscaId($this->data['uuid_int_id'], Integrador::class));
             $integrador->update($this->data);
 
@@ -126,7 +131,7 @@ class IntegradorService
 
         if ($update) {
             $validacao['uuid_int_id'] = 'required|uuid';
-            unset($validacao['uuid_dis_id']);
+            $validacao['uuid_dis_id'] = 'uuid';
         }
 
         return Validator::make($this->data, $validacao);
