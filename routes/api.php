@@ -121,6 +121,8 @@ Route::middleware(['cors', 'logs'])->group(function () {
 
         Route::prefix('inversores')->group(function () {
             Route::get('/', 'Api\InversorController@index');
+            Route::get('disponiveis', 'Api\InversorController@disponiveis');
+            Route::get('distribuidor/{uuid}', 'Api\InversorController@distribuidor');
             Route::get('integrador/{uuid}', 'Api\InversorController@integrador');
             Route::get('{uuid}', 'Api\InversorController@show');
             Route::post('novo', 'Api\InversorController@store');
@@ -153,6 +155,12 @@ Route::middleware(['cors', 'logs'])->group(function () {
                 Route::post('novo', 'Api\UsinaIndicadorController@store');
                 Route::post('edita', 'Api\UsinaIndicadorController@update');
                 Route::delete('remove/{uuid}', 'Api\UsinaIndicadorController@destroy');
+            });
+
+            Route::prefix('{uuidUsina}/inversores')->group(function () {
+                Route::get('/', 'Api\UsinaInversorController@index');
+                Route::post('novo', 'Api\UsinaInversorController@store');
+                Route::delete('remove/{uuid}', 'Api\UsinaInversorController@destroy');
             });
         });
     });

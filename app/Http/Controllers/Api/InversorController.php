@@ -27,6 +27,26 @@ class InversorController extends Controller
         return response()->json(['msg' => $data['msg']],400);
     }
 
+    public function disponiveis(Request $request)
+    {
+        $data = $this->inversorService->indice($request, true);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']],400);
+    }
+
+    public function distribuidor(Request $request, $uuid)
+    {
+        $data = $this->inversorService->listInversoresDistribuidor($request, $uuid);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']],400);
+    }
+
     public function integrador(Request $request, $uuid)
     {
         $data = $this->inversorService->listInversoresIntegrador($request, $uuid);

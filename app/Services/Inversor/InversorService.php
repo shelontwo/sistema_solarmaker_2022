@@ -5,6 +5,7 @@ namespace App\Services\Inversor;
 use Exception;
 use App\Models\Inversor;
 use App\Models\Integrador;
+use App\Models\Distribuidor;
 use App\Helpers\HelperBuscaId;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,11 +20,46 @@ class InversorService
         return $this;
     }
 
-    public function indice($request)
+    public function indice($request, $somenteDisponiveis = false)
     {
         try {
+            $usuario = auth()->user();
+
+            if ($usuario->fk_int_id_integrador) {
+                return $this->listInversoresIntegrador($request, $usuario->fk_int_id_integrador, $somenteDisponiveis);
+            }
+            if ($usuario->fk_dis_id_distribuidor) {
+                return $this->listInversoresDistribuidor($request, $usuario->fk_dis_id_distribuidor, $somenteDisponiveis);
+            }
+
             $inversores = Inversor::select('uuid_inv_id', 'inv_id', 'inv_marca', 'inv_modelo', 'inv_status', 'inv_garantia', 'fk_int_id_integrador')
                 ->with('integrador');
+
+            if ($somenteDisponiveis) {
+                $inversores->doesntHave('usinaInversor');
+            }
+                
+            $inversores = $request->input('page') ? $inversores->paginate() : $inversores->get();
+
+            return ['status' => true, 'data' => $inversores];
+        } catch (\Exception $error) {
+            return ['status' => false, 'msg' => $error->getMessage()];
+        }
+    }
+
+    public function listInversoresIntegrador($request, $uuid, $somenteDisponiveis)
+    {
+        try {
+            $fk_int_id_integrador = HelperBuscaId::buscaId($uuid, Integrador::class);
+
+            $inversores = Inversor::select('uuid_inv_id', 'inv_id', 'inv_marca', 'inv_modelo', 'inv_status', 'inv_garantia', 'fk_int_id_integrador')
+                ->where('fk_int_id_integrador', $fk_int_id_integrador)
+                ->with('integrador');
+
+            if ($somenteDisponiveis) {
+                $inversores->doesntHave('usinaInversor');
+            }
+
             $inversores = $request->input('page') ? $inversores->paginate() : $inversores->get();
                 
             return ['status' => true, 'data' => $inversores];
@@ -32,14 +68,26 @@ class InversorService
         }
     }
 
-    public function listInversoresIntegrador($request, $uuid)
+    public function listInversoresDistribuidor($request, $uuid, $somenteDisponiveis)
     {
         try {
-            $fk_int_id_integrador = HelperBuscaId::buscaId($uuid, Integrador::class);
+            $distribuidor = Distribuidor::find(is_integer($uuid) ? $uuid : HelperBuscaId::buscaId($uuid, Distribuidor::class));
+            $integradores = $distribuidor->integradores()->get();
+
+            $integradores_ids = [];
+
+            foreach ($integradores as $integrador) {
+                array_push($integradores_ids, $integrador->int_id);
+            }
 
             $inversores = Inversor::select('uuid_inv_id', 'inv_id', 'inv_marca', 'inv_modelo', 'inv_status', 'inv_garantia', 'fk_int_id_integrador')
-                ->where('fk_int_id_integrador', $fk_int_id_integrador)
+                ->whereIn('fk_int_id_integrador', $integradores_ids)
                 ->with('integrador');
+
+            if ($somenteDisponiveis) {
+                $inversores->doesntHave('usinaInversor');
+            }
+            
             $inversores = $request->input('page') ? $inversores->paginate() : $inversores->get();
                 
             return ['status' => true, 'data' => $inversores];

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Integrador;
 use Illuminate\Support\Str;
+use App\Models\UsinaInversor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -47,5 +48,10 @@ class Inversor extends Model
     public function integrador()
     {
         return $this->belongsTo(Integrador::class, 'fk_int_id_integrador')->select('uuid_int_id', 'int_id', 'int_nome');
+    }
+
+    public function usinaInversor()
+    {
+        return $this->belongsTo(UsinaInversor::class, 'inv_id', 'fk_inv_id_inversor');
     }
 }
