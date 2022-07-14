@@ -101,6 +101,14 @@ Route::middleware(['cors', 'logs'])->group(function () {
             Route::post('novo', 'Api\ChamadoController@store');
             Route::post('edita', 'Api\ChamadoController@update');
             Route::delete('remove/{uuid}', 'Api\ChamadoController@destroy');
+            
+            Route::prefix('{uuidChamado}/comentarios')->group(function () {
+                Route::get('/', 'Api\ChamadoComentarioController@index');
+                Route::get('{uuid}', 'Api\ChamadoComentarioController@show');
+                Route::post('novo', 'Api\ChamadoComentarioController@store');
+                Route::post('edita', 'Api\ChamadoComentarioController@update');
+                Route::delete('remove/{uuid}', 'Api\ChamadoComentarioController@destroy');
+            });
         });
 
         Route::prefix('concessionarias')->group(function () {
