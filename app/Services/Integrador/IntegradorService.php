@@ -22,6 +22,12 @@ class IntegradorService
     public function indice($request)
     {
         try {
+            $usuario = auth()->user();
+
+            if ($usuario->fk_dis_id_distribuidor) {
+                return $this->listIntegradoresDistribuidor($request, $usuario->fk_dis_id_distribuidor);
+            }
+
             $integradores = Integrador::select('uuid_int_id', 'int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular', 'fk_dis_id_distribuidor')
                 ->with('distribuidor');
             $integradores = $request->input('page') ? $integradores->paginate() : $integradores->get();
@@ -35,10 +41,11 @@ class IntegradorService
     public function listIntegradoresDistribuidor($request, $uuid)
     {
         try {
-            $fk_dis_id_distribuidor = HelperBuscaId::buscaId($uuid, Distribuidor::class);
+            $fk_dis_id_distribuidor = is_integer($uuid) ? $uuid : HelperBuscaId::buscaId($uuid, Distribuidor::class);
 
-            $integradores = Integrador::select('uuid_int_id', 'int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular')
-                ->where('fk_dis_id_distribuidor', $fk_dis_id_distribuidor);
+            $integradores = Integrador::select('uuid_int_id', 'int_id', 'int_nome', 'int_nome_fantasia', 'int_telefone', 'int_celular', 'fk_dis_id_distribuidor')
+                ->where('fk_dis_id_distribuidor', $fk_dis_id_distribuidor)
+                ->with('distribuidor');
             $integradores = $request->input('page') ? $integradores->paginate() : $integradores->get();
 
             return ['status' => true, 'data' => $integradores];

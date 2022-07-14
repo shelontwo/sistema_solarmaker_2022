@@ -27,6 +27,16 @@ class UsinaController extends Controller
         return response()->json(['msg' => $data['msg']],400);
     }
 
+    public function distribuidor(Request $request, $uuid)
+    {
+        $data = $this->usina->listUsinasDistribuidor($request, $uuid);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']],400);
+    }
+
     public function integrador(Request $request, $uuid)
     {
         $data = $this->usina->listUsinasIntegrador($request, $uuid);

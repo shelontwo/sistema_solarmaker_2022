@@ -132,6 +132,7 @@ Route::middleware(['cors', 'logs'])->group(function () {
 
         Route::prefix('usinas')->group(function () {
             Route::get('/', 'Api\UsinaController@index');
+            Route::get('distribuidor/{uuid}', 'Api\UsinaController@distribuidor');
             Route::get('integrador/{uuid}', 'Api\UsinaController@integrador');
             Route::get('cliente/{uuid}', 'Api\UsinaController@cliente');
             Route::get('{uuid}', 'Api\UsinaController@show');

@@ -50,7 +50,7 @@ class InversorService
     public function listInversoresIntegrador($request, $uuid, $somenteDisponiveis)
     {
         try {
-            $fk_int_id_integrador = HelperBuscaId::buscaId($uuid, Integrador::class);
+            $fk_int_id_integrador = is_integer($uuid) ? $uuid : HelperBuscaId::buscaId($uuid, Integrador::class);
 
             $inversores = Inversor::select('uuid_inv_id', 'inv_id', 'inv_marca', 'inv_modelo', 'inv_status', 'inv_garantia', 'fk_int_id_integrador')
                 ->where('fk_int_id_integrador', $fk_int_id_integrador)

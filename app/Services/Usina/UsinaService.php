@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Usina;
 use App\Models\Cliente;
 use App\Models\Integrador;
+use App\Models\Distribuidor;
 use App\Helpers\HelperBuscaId;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,6 +24,15 @@ class UsinaService
     public function indice($request)
     {
         try {
+            $usuario = auth()->user();
+
+            if ($usuario->fk_int_id_integrador) {
+                return $this->listUsinasIntegrador($request, $usuario->fk_int_id_integrador);
+            }
+            if ($usuario->fk_dis_id_distribuidor) {
+                return $this->listUsinasDistribuidor($request, $usuario->fk_dis_id_distribuidor);
+            }
+
             $usinas = Usina::select('uuid_usi_id', 'usi_id', 'usi_nome', 'usi_cidade', 'usi_status','fk_int_id_integrador', 'fk_cli_id_cliente')
                 ->with('integrador', 'cliente');
             $usinas = $request->input('page') ? $usinas->paginate() : $usinas->get();
@@ -36,10 +46,33 @@ class UsinaService
     public function listUsinasIntegrador($request, $uuid)
     {
         try {
-            $fk_int_id_integrador = HelperBuscaId::buscaId($uuid, Integrador::class);
+            $fk_int_id_integrador = is_integer($uuid) ? $uuid : HelperBuscaId::buscaId($uuid, Integrador::class);
 
             $usinas = Usina::select('uuid_usi_id', 'usi_id', 'usi_nome', 'usi_cidade', 'usi_status','fk_int_id_integrador', 'fk_cli_id_cliente')
                 ->where('fk_int_id_integrador', $fk_int_id_integrador)
+                ->with('integrador', 'cliente');
+            $usinas = $request->input('page') ? $usinas->paginate() : $usinas->get();
+            
+            return ['status' => true, 'data' => $usinas];
+        } catch (\Exception $error) {
+            return ['status' => false, 'msg' => $error->getMessage()];
+        }
+    }
+
+    public function listUsinasDistribuidor($request, $uuid)
+    {
+        try {
+            $distribuidor = Distribuidor::find(is_integer($uuid) ? $uuid : HelperBuscaId::buscaId($uuid, Distribuidor::class));
+            $integradores = $distribuidor->integradores()->get();
+
+            $integradores_ids = [];
+
+            foreach ($integradores as $integrador) {
+                array_push($integradores_ids, $integrador->int_id);
+            }
+
+            $usinas = Usina::select('uuid_usi_id', 'usi_id', 'usi_nome', 'usi_cidade', 'usi_status','fk_int_id_integrador', 'fk_cli_id_cliente')
+                ->whereIn('fk_int_id_integrador', $integradores_ids)
                 ->with('integrador', 'cliente');
             $usinas = $request->input('page') ? $usinas->paginate() : $usinas->get();
             
