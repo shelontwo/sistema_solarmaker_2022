@@ -17,9 +17,9 @@ class IntegradorApiController extends Controller
         $this->apiService = $apiService;
     }
 
-    public function index(Request $request, $uuidIntegrador)
+    public function index(Request $request)
     {
-        $data = $this->apiService->indice($request, $uuidIntegrador);
+        $data = $this->apiService->indice($request);
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -27,10 +27,30 @@ class IntegradorApiController extends Controller
         return response()->json(['msg' => $data['msg']],400);
     }
 
-    public function store(Request $request, $uuidIntegrador)
+    public function distribuidor(Request $request, $uuid)
+    {
+        $data = $this->apiService->listApisDistribuidor($request, $uuid);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']],400);
+    }
+
+    public function integrador(Request $request, $uuid)
+    {
+        $data = $this->apiService->listApisIntegrador($request, $uuid);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']],400);
+    }
+
+    public function store(Request $request)
     {
         $this->apiService->defineData($request->all());
-        $data = $this->apiService->novaApi($uuidIntegrador);
+        $data = $this->apiService->novaApi();
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -38,9 +58,9 @@ class IntegradorApiController extends Controller
         return response()->json(['msg' => $data['msg']], isset($data['http_status']) ? $data['http_status'] : 400);
     }
    
-    public function show($uuidIntegrador, $uuidApi)
+    public function show($uuid)
     {
-        $data = $this->apiService->listApi($uuidIntegrador, $uuidApi);
+        $data = $this->apiService->listApi($uuid);
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -59,9 +79,9 @@ class IntegradorApiController extends Controller
         return response()->json(['msg' => $data['msg']], 400);
     }
    
-    public function destroy($uuidIntegrador, $uuidApi)
+    public function destroy($uuid)
     {
-        $data = $this->apiService->removeApi($uuidIntegrador, $uuidApi);
+        $data = $this->apiService->removeApi($uuid);
 
         if ($data['status']) {
             return response()->json(['msg' => $data['msg']]);

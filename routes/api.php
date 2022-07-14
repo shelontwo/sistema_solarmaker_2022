@@ -70,16 +70,16 @@ Route::middleware(['cors', 'logs'])->group(function () {
             Route::post('novo', 'Api\IntegradorController@store');
             Route::post('edita', 'Api\IntegradorController@update');
             Route::delete('remove/{uuid}', 'Api\IntegradorController@destroy');
-            
-            Route::prefix('{uuidIntegrador}/api')->group(function () {
-                Route::get('/', 'Api\IntegradorApiController@index');
-                Route::get('{uuidApi}', 'Api\IntegradorApiController@show');
-                Route::post('novo', 'Api\IntegradorApiController@store');
-                Route::post('edita', 'Api\IntegradorApiController@update');
-                Route::delete('remove/{uuid}', 'Api\IntegradorApiController@destroy');
-            });
+        });
 
-            
+        Route::prefix('apis')->group(function () {
+            Route::get('/', 'Api\IntegradorApiController@index');
+            Route::get('distribuidor/{uuid}', 'Api\IntegradorApiController@distribuidor');
+            Route::get('integrador/{uuid}', 'Api\IntegradorApiController@integrador');
+            Route::get('{uuid}', 'Api\IntegradorApiController@show');
+            Route::post('novo', 'Api\IntegradorApiController@store');
+            Route::post('edita', 'Api\IntegradorApiController@update');
+            Route::delete('remove/{uuid}', 'Api\IntegradorApiController@destroy');
         });
 
         Route::prefix('clientes')->group(function () {
