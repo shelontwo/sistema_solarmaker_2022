@@ -33,7 +33,8 @@ class ClienteService
                 return $this->listClientesDistribuidor($request, $usuario->fk_dis_id_distribuidor);
             }
 
-            $clientes = Cliente::select('uuid_cli_id', 'cli_id', 'cli_nome', 'cli_cidade', 'cli_bairro', 'cli_uf', 'cli_usuario');
+            $clientes = Cliente::select('uuid_cli_id', 'cli_id', 'cli_nome', 'cli_cidade', 'cli_bairro', 'cli_uf', 'cli_usuario', 'fk_int_id_integrador')
+                ->with('integrador');
             $clientes = $request->input('page') ? $clientes->paginate() : $clientes->get();
 
             return ['status' => true, 'data' => $clientes];
@@ -47,7 +48,8 @@ class ClienteService
         try {
             $fk_int_id_integrador = is_integer($uuid) ? $uuid : HelperBuscaId::buscaId($uuid, Integrador::class);
             
-            $clientes = Cliente::select('uuid_cli_id', 'cli_id', 'cli_nome', 'cli_cidade', 'cli_bairro', 'cli_uf', 'cli_usuario')
+            $clientes = Cliente::select('uuid_cli_id', 'cli_id', 'cli_nome', 'cli_cidade', 'cli_bairro', 'cli_uf', 'cli_usuario', 'fk_int_id_integrador')
+                ->with('integrador')
                 ->where('fk_int_id_integrador', $fk_int_id_integrador);
             $clientes = $request->input('page') ? $clientes->paginate() : $clientes->get();
 
@@ -69,7 +71,8 @@ class ClienteService
                 array_push($integradores_ids, $integrador->int_id);
             }
 
-            $clientes = Cliente::select('uuid_cli_id', 'cli_id', 'cli_nome', 'cli_cidade', 'cli_bairro', 'cli_uf', 'cli_usuario')
+            $clientes = Cliente::select('uuid_cli_id', 'cli_id', 'cli_nome', 'cli_cidade', 'cli_bairro', 'cli_uf', 'cli_usuario', 'fk_int_id_integrador')
+                ->with('integrador')
                 ->whereIn('fk_int_id_integrador', $integradores_ids);
             $clientes = $request->input('page') ? $clientes->paginate() : $clientes->get();
                 
@@ -82,7 +85,7 @@ class ClienteService
     public function listCliente($uuid)
     {
         try {
-            $cliente = Cliente::where('uuid_cli_id', $uuid)->first();
+            $cliente = Cliente::where('uuid_cli_id', $uuid)->with('integrador')->first();
             return ['status' => true, 'data' => $cliente];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
