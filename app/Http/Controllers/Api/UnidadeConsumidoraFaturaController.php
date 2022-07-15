@@ -4,22 +4,22 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\UnidadeConsumidora\LancamentoCreditoService;
+use App\Services\UnidadeConsumidora\FaturaService;
 
-class UnidadeConsumidoraCreditoController extends Controller
+class UnidadeConsumidoraFaturaController extends Controller
 {
-    protected $lancamentoCreditoService;
+    protected $faturaService;
 
     public function __construct(
-        LancamentoCreditoService $lancamentoCreditoService
+        FaturaService $faturaService
     )
     {
-        $this->lancamentoCreditoService = $lancamentoCreditoService;
+        $this->faturaService = $faturaService;
     }
 
     public function index(Request $request, $uuidUnidade)
     {
-        $data = $this->lancamentoCreditoService->indice($request, $uuidUnidade);
+        $data = $this->faturaService->indice($request, $uuidUnidade);
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -29,8 +29,8 @@ class UnidadeConsumidoraCreditoController extends Controller
 
     public function store(Request $request, $uuidUnidade)
     {
-        $this->lancamentoCreditoService->defineData($request->all());
-        $data = $this->lancamentoCreditoService->novoCredito($uuidUnidade);
+        $this->faturaService->defineData($request->all());
+        $data = $this->faturaService->novaFatura($uuidUnidade);
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -40,7 +40,7 @@ class UnidadeConsumidoraCreditoController extends Controller
    
     public function show($uuidUnidade, $uuid)
     {
-        $data = $this->lancamentoCreditoService->listCredito($uuidUnidade, $uuid);
+        $data = $this->faturaService->listFatura($uuidUnidade, $uuid);
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -50,8 +50,8 @@ class UnidadeConsumidoraCreditoController extends Controller
    
     public function update(Request $request, $uuidUnidade)
     {
-        $this->lancamentoCreditoService->defineData($request->all());
-        $data = $this->lancamentoCreditoService->atualizaCredito($uuidUnidade);
+        $this->faturaService->defineData($request->all());
+        $data = $this->faturaService->atualizaFatura($uuidUnidade);
 
         if ($data['status']) {
             return response()->json($data['data']);
@@ -61,7 +61,7 @@ class UnidadeConsumidoraCreditoController extends Controller
    
     public function destroy($uuidUnidade, $uuid)
     {
-        $data = $this->lancamentoCreditoService->removeCredito($uuidUnidade, $uuid);
+        $data = $this->faturaService->removeFatura($uuidUnidade, $uuid);
 
         if ($data['status']) {
             return response()->json(['msg' => $data['msg']]);

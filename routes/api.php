@@ -188,6 +188,14 @@ Route::middleware(['cors', 'logs'])->group(function () {
                 Route::post('edita', 'Api\UnidadeConsumidoraCreditoController@update');
                 Route::delete('remove/{uuid}', 'Api\UnidadeConsumidoraCreditoController@destroy');
             });
+
+            Route::prefix('{uuidUnidade}/faturas')->group(function () {
+                Route::get('/', 'Api\UnidadeConsumidoraFaturaController@index');
+                Route::get('{uuid}', 'Api\UnidadeConsumidoraFaturaController@show');
+                Route::post('novo', 'Api\UnidadeConsumidoraFaturaController@store');
+                Route::post('edita', 'Api\UnidadeConsumidoraFaturaController@update');
+                Route::delete('remove/{uuid}', 'Api\UnidadeConsumidoraFaturaController@destroy');
+            });
         });
     });
 });

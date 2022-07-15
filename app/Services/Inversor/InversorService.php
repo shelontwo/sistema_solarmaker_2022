@@ -7,8 +7,8 @@ use App\Models\Inversor;
 use App\Models\Integrador;
 use App\Models\Distribuidor;
 use App\Helpers\HelperBuscaId;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
-
 class InversorService
 {
     protected $data;
@@ -33,7 +33,9 @@ class InversorService
             }
 
             $inversores = Inversor::select('uuid_inv_id', 'inv_id', 'inv_marca', 'inv_modelo', 'inv_status', 'inv_garantia', 'fk_int_id_integrador')
-                ->with('integrador');
+                ->with(array('integrador', 'usinaInversor' => function ($filho) {
+                    $filho->select('uuid_inu_id', 'inu_id', 'fk_inv_id_inversor');
+                }));
 
             if ($somenteDisponiveis) {
                 $inversores->doesntHave('usinaInversor');
@@ -47,14 +49,16 @@ class InversorService
         }
     }
 
-    public function listInversoresIntegrador($request, $uuid, $somenteDisponiveis)
+    public function listInversoresIntegrador($request, $uuid, $somenteDisponiveis = false)
     {
         try {
             $fk_int_id_integrador = is_integer($uuid) ? $uuid : HelperBuscaId::buscaId($uuid, Integrador::class);
 
             $inversores = Inversor::select('uuid_inv_id', 'inv_id', 'inv_marca', 'inv_modelo', 'inv_status', 'inv_garantia', 'fk_int_id_integrador')
                 ->where('fk_int_id_integrador', $fk_int_id_integrador)
-                ->with('integrador');
+                ->with(array('integrador', 'usinaInversor' => function ($filho) {
+                    $filho->select('uuid_inu_id', 'inu_id', 'fk_inv_id_inversor');
+                }));
 
             if ($somenteDisponiveis) {
                 $inversores->doesntHave('usinaInversor');
@@ -68,7 +72,7 @@ class InversorService
         }
     }
 
-    public function listInversoresDistribuidor($request, $uuid, $somenteDisponiveis)
+    public function listInversoresDistribuidor($request, $uuid, $somenteDisponiveis = false)
     {
         try {
             $distribuidor = Distribuidor::find(is_integer($uuid) ? $uuid : HelperBuscaId::buscaId($uuid, Distribuidor::class));
@@ -82,7 +86,9 @@ class InversorService
 
             $inversores = Inversor::select('uuid_inv_id', 'inv_id', 'inv_marca', 'inv_modelo', 'inv_status', 'inv_garantia', 'fk_int_id_integrador')
                 ->whereIn('fk_int_id_integrador', $integradores_ids)
-                ->with('integrador');
+                ->with(array('integrador', 'usinaInversor' => function ($filho) {
+                    $filho->select('uuid_inu_id', 'inu_id', 'fk_inv_id_inversor');
+                }));
 
             if ($somenteDisponiveis) {
                 $inversores->doesntHave('usinaInversor');
@@ -99,7 +105,7 @@ class InversorService
     public function listInversor($uuid)
     {
         try {
-            $inversor = Inversor::where('uuid_inv_id', $uuid)->first();
+            $inversor = Inversor::where('uuid_inv_id', $uuid)->with('integrador')->first();
             return ['status' => true, 'data' => $inversor];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];

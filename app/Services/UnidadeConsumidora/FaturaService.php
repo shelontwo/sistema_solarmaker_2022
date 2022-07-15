@@ -6,10 +6,10 @@ use Exception;
 use App\Models\Usina;
 use App\Helpers\HelperBuscaId;
 use App\Models\UnidadeConsumidora;
-use App\Models\UnidadeConsumidoraCredito;
+use App\Models\UnidadeConsumidoraFatura;
 use Illuminate\Support\Facades\Validator;
 
-class LancamentoCreditoService
+class FaturaService
 {
     protected $data;
 
@@ -24,28 +24,27 @@ class LancamentoCreditoService
     {
         try {
             $fk_uco_id_unidade = HelperBuscaId::buscaId($uuidUnidade, UnidadeConsumidora::class);
-            $creditos = UnidadeConsumidoraCredito::where('fk_uco_id_unidade', $fk_uco_id_unidade)
-                ->with('usina');
-            $creditos = $request->input('page') ? $creditos->paginate() : $creditos->get();
+            $fatura = UnidadeConsumidoraFatura::where('fk_uco_id_unidade', $fk_uco_id_unidade);
+            $fatura = $request->input('page') ? $fatura->paginate() : $fatura->get();
             
-            return ['status' => true, 'data' => $creditos];
+            return ['status' => true, 'data' => $fatura];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function listCredito($uuidUnidade, $uuid)
+    public function listFatura($uuidUnidade, $uuid)
     {
         try {
             $fk_uco_id_unidade = HelperBuscaId::buscaId($uuidUnidade, UnidadeConsumidora::class);
-            $credito = UnidadeConsumidoraCredito::where('fk_uco_id_unidade', $fk_uco_id_unidade)->where('uuid_ucc_id', $uuid)->first();
-            return ['status' => true, 'data' => $credito];
+            $fatura = UnidadeConsumidoraFatura::where('fk_uco_id_unidade', $fk_uco_id_unidade)->where('uuid_ucf_id', $uuid)->first();
+            return ['status' => true, 'data' => $fatura];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function novoCredito($uuidUnidade)
+    public function novaFatura($uuidUnidade)
     {
         try {
             $this->data['uuid_uco_id'] = $uuidUnidade;
@@ -55,18 +54,17 @@ class LancamentoCreditoService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
-            $this->data['fk_usi_id_usina'] = HelperBuscaId::buscaId($this->data['uuid_usi_id'], Usina::class);
             $this->data['fk_uco_id_unidade'] = HelperBuscaId::buscaId($this->data['uuid_uco_id'], UnidadeConsumidora::class);
             
-            $credito = UnidadeConsumidoraCredito::create($this->data);
+            $fatura = UnidadeConsumidoraFatura::create($this->data);
 
-            return ['status' => true, 'data' => $credito];
+            return ['status' => true, 'data' => $fatura];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function atualizaCredito($uuidUnidade)
+    public function atualizaFatura($uuidUnidade)
     {
         try {
             $this->data['uuid_uco_id'] = $uuidUnidade;
@@ -76,24 +74,23 @@ class LancamentoCreditoService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
-            $this->data['fk_usi_id_usina'] = HelperBuscaId::buscaId($this->data['uuid_usi_id'], Usina::class);
             $this->data['fk_uco_id_unidade'] = HelperBuscaId::buscaId($this->data['uuid_uco_id'], UnidadeConsumidora::class);
 
-            $credito = UnidadeConsumidoraCredito::find(HelperBuscaId::buscaId($this->data['uuid_ucc_id'], UnidadeConsumidoraCredito::class));
-            $credito->update($this->data);
+            $fatura = UnidadeConsumidoraFatura::find(HelperBuscaId::buscaId($this->data['uuid_ucf_id'], UnidadeConsumidoraFatura::class));
+            $fatura->update($this->data);
 
-            return ['status' => true, 'data' => $credito];
+            return ['status' => true, 'data' => $fatura];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function removeCredito($uuidUnidade, $uuid)
+    public function removeFatura($uuidUnidade, $uuid)
     {
         try {
             $fk_uco_id_unidade = HelperBuscaId::buscaId($uuidUnidade, UnidadeConsumidora::class);
-            $credito = UnidadeConsumidoraCredito::where('fk_uco_id_unidade', $fk_uco_id_unidade)->where('uuid_ucc_id', $uuid)->delete();
-            return ['status' => true, 'msg' => $credito ? 'Lançamento de crédito removido com sucesso' : 'Erro ao remover lançamento de crédito'];
+            $fatura = UnidadeConsumidoraFatura::where('fk_uco_id_unidade', $fk_uco_id_unidade)->where('uuid_ucf_id', $uuid)->delete();
+            return ['status' => true, 'msg' => $fatura ? 'Fatura removido com sucesso' : 'Erro ao remover fatura'];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
@@ -102,16 +99,23 @@ class LancamentoCreditoService
     private function validaCampos($update = false)
     {
         $validacao = [
-            'ucc_quantidade' => 'required|numeric',
-            'ucc_vigencia' => 'required|date',
-            'ucc_posto_tarifario' => 'required|integer',
-            'ucc_observacao' => 'required|string',
-            'uuid_usi_id' => 'required|uuid',
+            'ucf_valor_faturado' => 'required|numeric',
+            'ucf_inicio_ciclo' => 'required|date',
+            'ucf_fim_ciclo' => 'required|date',
+            'ucf_valor_tarifa' => 'required|numeric',
+            'ucf_consumida' => 'required|numeric',
+            'ucf_faturada' => 'required|numeric',
+            'ucf_tarifa' => 'required|numeric',
+            'ucf_energia' => 'required|numeric',
+            'ucf_energia_injetada' => 'required|numeric',
+            'ucf_situacao' => 'required|integer',
+            'ucf_nome_arquivo' => 'string|max:255',
+            'ucf_arquivo' => 'string|max:255',
             'uuid_uco_id' => 'required|uuid'
         ];
 
         if ($update) {
-            $validacao['uuid_ucc_id'] = 'required|uuid';
+            $validacao['uuid_ucf_id'] = 'required|uuid';
         }
 
         return Validator::make($this->data, $validacao);
