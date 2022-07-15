@@ -164,5 +164,13 @@ Route::middleware(['cors', 'logs'])->group(function () {
                 Route::delete('remove/{uuid}', 'Api\UsinaInversorController@destroy');
             });
         });
+
+        Route::prefix('unidades-consumidoras')->group(function () {
+            Route::get('/', 'Api\UnidadeConsumidoraController@index');
+            Route::get('{uuid}', 'Api\UnidadeConsumidoraController@show');
+            Route::post('novo', 'Api\UnidadeConsumidoraController@store');
+            Route::post('edita', 'Api\UnidadeConsumidoraController@update');
+            Route::delete('remove/{uuid}', 'Api\UnidadeConsumidoraController@destroy');
+        });
     });
 });
