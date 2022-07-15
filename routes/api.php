@@ -132,6 +132,7 @@ Route::middleware(['cors', 'logs'])->group(function () {
 
         Route::prefix('usinas')->group(function () {
             Route::get('/', 'Api\UsinaController@index');
+            Route::get('unidade-consumidora/{uuid}', 'Api\UsinaController@unidade');
             Route::get('distribuidor/{uuid}', 'Api\UsinaController@distribuidor');
             Route::get('integrador/{uuid}', 'Api\UsinaController@integrador');
             Route::get('cliente/{uuid}', 'Api\UsinaController@cliente');
@@ -180,7 +181,7 @@ Route::middleware(['cors', 'logs'])->group(function () {
             Route::post('edita', 'Api\UnidadeConsumidoraController@update');
             Route::delete('remove/{uuid}', 'Api\UnidadeConsumidoraController@destroy');
 
-            Route::prefix('{uuidUsina}/lancamento-credito')->group(function () {
+            Route::prefix('{uuidUnidade}/lancamento-credito')->group(function () {
                 Route::get('/', 'Api\UnidadeConsumidoraCreditoController@index');
                 Route::get('{uuid}', 'Api\UnidadeConsumidoraCreditoController@show');
                 Route::post('novo', 'Api\UnidadeConsumidoraCreditoController@store');

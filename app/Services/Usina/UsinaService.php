@@ -8,8 +8,9 @@ use App\Models\Cliente;
 use App\Models\Integrador;
 use App\Models\Distribuidor;
 use App\Helpers\HelperBuscaId;
+use App\Models\UnidadeConsumidora;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
-
 class UsinaService
 {
     protected $data;
@@ -90,6 +91,24 @@ class UsinaService
             $usinas = Usina::select('uuid_usi_id', 'usi_id', 'usi_nome', 'usi_cidade', 'usi_status','fk_int_id_integrador', 'fk_cli_id_cliente')
                 ->where('fk_cli_id_cliente', $fk_cli_id_cliente)
                 ->with('integrador', 'cliente');
+            $usinas = $request->input('page') ? $usinas->paginate() : $usinas->get();
+            
+            return ['status' => true, 'data' => $usinas];
+        } catch (\Exception $error) {
+            return ['status' => false, 'msg' => $error->getMessage()];
+        }
+    }
+
+    public function listUsinasUnidade($request, $uuid)
+    {
+        try {
+            $this->defineData(['fk_uco_id_unidade' => HelperBuscaId::buscaId($uuid, UnidadeConsumidora::class)]);
+
+            $usinas = Usina::select('uuid_usi_id', 'usi_id', 'usi_nome', 'usi_cidade', 'usi_status','fk_int_id_integrador', 'fk_cli_id_cliente')
+                ->with('integrador', 'cliente')
+                ->whereHas('sistema_credito', function (Builder $credito) {
+                    $credito->where('fk_uco_id_unidade', $this->data['fk_uco_id_unidade']);
+                });
             $usinas = $request->input('page') ? $usinas->paginate() : $usinas->get();
             
             return ['status' => true, 'data' => $usinas];
