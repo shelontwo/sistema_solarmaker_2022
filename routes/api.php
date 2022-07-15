@@ -179,6 +179,14 @@ Route::middleware(['cors', 'logs'])->group(function () {
             Route::post('novo', 'Api\UnidadeConsumidoraController@store');
             Route::post('edita', 'Api\UnidadeConsumidoraController@update');
             Route::delete('remove/{uuid}', 'Api\UnidadeConsumidoraController@destroy');
+
+            Route::prefix('{uuidUsina}/lancamento-credito')->group(function () {
+                Route::get('/', 'Api\UnidadeConsumidoraCreditoController@index');
+                Route::get('{uuid}', 'Api\UnidadeConsumidoraCreditoController@show');
+                Route::post('novo', 'Api\UnidadeConsumidoraCreditoController@store');
+                Route::post('edita', 'Api\UnidadeConsumidoraCreditoController@update');
+                Route::delete('remove/{uuid}', 'Api\UnidadeConsumidoraCreditoController@destroy');
+            });
         });
     });
 });

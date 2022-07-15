@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Services\Usina;
+namespace App\Services\UnidadeConsumidora;
 
 use Exception;
 use App\Models\Usina;
 use App\Helpers\HelperBuscaId;
 use App\Models\UnidadeConsumidora;
-use App\Models\UsinaSistemaCredito;
+use App\Models\UnidadeConsumidoraCredito;
 use Illuminate\Support\Facades\Validator;
 
-class SistemaCreditoService
+class LancamentoCreditoService
 {
     protected $data;
 
@@ -20,13 +20,12 @@ class SistemaCreditoService
         return $this;
     }
 
-    public function indice($request, $uuidUsina)
+    public function indice($request, $uuidUnidade)
     {
         try {
-            $fk_usi_id_usina = HelperBuscaId::buscaId($uuidUsina, Usina::class);
-            $creditos = UsinaSistemaCredito::select('uuid_usc_id', 'usc_id', 'usc_vigencia', 'usc_percentual', 'fk_uco_id_unidade')
-                ->where('fk_usi_id_usina', $fk_usi_id_usina)
-                ->with('unidade');
+            $fk_usi_id_usina = HelperBuscaId::buscaId($uuidUnidade, UnidadeConsumidora::class);
+            $creditos = UnidadeConsumidoraCredito::where('fk_usi_id_usina', $fk_usi_id_usina)
+                ->with('usina');
             $creditos = $request->input('page') ? $creditos->paginate() : $creditos->get();
             
             return ['status' => true, 'data' => $creditos];
@@ -35,21 +34,21 @@ class SistemaCreditoService
         }
     }
 
-    public function listCredito($uuidUsina, $uuid)
+    public function listCredito($uuidUnidade, $uuid)
     {
         try {
-            $fk_usi_id_usina = HelperBuscaId::buscaId($uuidUsina, Usina::class);
-            $credito = UsinaSistemaCredito::where('fk_usi_id_usina', $fk_usi_id_usina)->where('uuid_usc_id', $uuid)->first();
+            $fk_usi_id_usina = HelperBuscaId::buscaId($uuidUnidade, UnidadeConsumidora::class);
+            $credito = UnidadeConsumidoraCredito::where('fk_usi_id_usina', $fk_usi_id_usina)->where('uuid_ucc_id', $uuid)->first();
             return ['status' => true, 'data' => $credito];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
     }
 
-    public function novoCredito($uuidUsina)
+    public function novoCredito($uuidUnidade)
     {
         try {
-            $this->data['uuid_usi_id'] = $uuidUsina;
+            $this->data['uuid_uco_id'] = $uuidUnidade;
             $validacao = $this->validaCampos();
             
             if ($validacao->fails()) {
@@ -59,7 +58,7 @@ class SistemaCreditoService
             $this->data['fk_usi_id_usina'] = HelperBuscaId::buscaId($this->data['uuid_usi_id'], Usina::class);
             $this->data['fk_uco_id_unidade'] = HelperBuscaId::buscaId($this->data['uuid_uco_id'], UnidadeConsumidora::class);
             
-            $credito = UsinaSistemaCredito::create($this->data);
+            $credito = UnidadeConsumidoraCredito::create($this->data);
 
             return ['status' => true, 'data' => $credito];
         } catch (\Exception $error) {
@@ -67,10 +66,10 @@ class SistemaCreditoService
         }
     }
 
-    public function atualizaCredito($uuidUsina)
+    public function atualizaCredito($uuidUnidade)
     {
         try {
-            $this->data['uuid_usi_id'] = $uuidUsina;
+            $this->data['uuid_uco_id'] = $uuidUnidade;
             $validacao = $this->validaCampos(true);
             
             if ($validacao->fails()) {
@@ -80,7 +79,7 @@ class SistemaCreditoService
             $this->data['fk_usi_id_usina'] = HelperBuscaId::buscaId($this->data['uuid_usi_id'], Usina::class);
             $this->data['fk_uco_id_unidade'] = HelperBuscaId::buscaId($this->data['uuid_uco_id'], UnidadeConsumidora::class);
 
-            $credito = UsinaSistemaCredito::find(HelperBuscaId::buscaId($this->data['uuid_usc_id'], UsinaSistemaCredito::class));
+            $credito = UnidadeConsumidoraCredito::find(HelperBuscaId::buscaId($this->data['uuid_ucc_id'], UnidadeConsumidoraCredito::class));
             $credito->update($this->data);
 
             return ['status' => true, 'data' => $credito];
@@ -89,12 +88,12 @@ class SistemaCreditoService
         }
     }
 
-    public function removeCredito($uuidUsina, $uuid)
+    public function removeCredito($uuidUnidade, $uuid)
     {
         try {
-            $fk_usi_id_usina = HelperBuscaId::buscaId($uuidUsina, Usina::class);
-            $credito = UsinaSistemaCredito::where('fk_usi_id_usina', $fk_usi_id_usina)->where('uuid_usc_id', $uuid)->delete();
-            return ['status' => true, 'msg' => $credito ? 'Sistema de crédito removido com sucesso' : 'Erro ao remover sistema de crédito'];
+            $fk_usi_id_usina = HelperBuscaId::buscaId($uuidUnidade, UnidadeConsumidora::class);
+            $credito = UnidadeConsumidoraCredito::where('fk_usi_id_usina', $fk_usi_id_usina)->where('uuid_ucc_id', $uuid)->delete();
+            return ['status' => true, 'msg' => $credito ? 'Lançamento de crédito removido com sucesso' : 'Erro ao remover lançamento de crédito'];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
@@ -103,14 +102,16 @@ class SistemaCreditoService
     private function validaCampos($update = false)
     {
         $validacao = [
-            'usc_vigencia' => 'required|date',
-            'usc_percentual' => 'required|numeric',
+            'ucc_quantidade' => 'required|numeric',
+            'ucc_vigencia' => 'required|date',
+            'ucc_posto_tarifario' => 'required|integer',
+            'ucc_observacao' => 'required|string',
             'uuid_usi_id' => 'required|uuid',
             'uuid_uco_id' => 'required|uuid'
         ];
 
         if ($update) {
-            $validacao['uuid_usc_id'] = 'required|uuid';
+            $validacao['uuid_ucc_id'] = 'required|uuid';
         }
 
         return Validator::make($this->data, $validacao);
