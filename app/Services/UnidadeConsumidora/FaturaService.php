@@ -5,13 +5,20 @@ namespace App\Services\UnidadeConsumidora;
 use Exception;
 use App\Models\Usina;
 use App\Helpers\HelperBuscaId;
+use App\Services\S3\S3Service;
 use App\Models\UnidadeConsumidora;
 use App\Models\UnidadeConsumidoraFatura;
 use Illuminate\Support\Facades\Validator;
-
 class FaturaService
 {
     protected $data;
+    
+    protected $s3Service;
+    
+    public function __construct(S3Service $s3Service)
+    {
+        $this->s3Service = $s3Service;
+    }
 
     public function defineData($data)
     {
@@ -54,6 +61,10 @@ class FaturaService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
+            if (isset($this->data['ucf_arquivo']) && $this->data['ucf_arquivo'] != 'null') {
+                $this->data['ucf_arquivo'] = $this->s3Service->enviaS3($this->data['ucf_arquivo'], 'faturas')->get('ObjectURL');
+            }
+
             $this->data['fk_uco_id_unidade'] = HelperBuscaId::buscaId($this->data['uuid_uco_id'], UnidadeConsumidora::class);
             
             $fatura = UnidadeConsumidoraFatura::create($this->data);
@@ -72,6 +83,10 @@ class FaturaService
             
             if ($validacao->fails()) {
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
+            }
+
+            if (isset($this->data['ucf_arquivo']) && $this->data['ucf_arquivo'] != 'null') {
+                $this->data['ucf_arquivo'] = $this->s3Service->enviaS3($this->data['ucf_arquivo'], 'faturas')->get('ObjectURL');
             }
 
             $this->data['fk_uco_id_unidade'] = HelperBuscaId::buscaId($this->data['uuid_uco_id'], UnidadeConsumidora::class);
@@ -110,7 +125,7 @@ class FaturaService
             'ucf_energia_injetada' => 'required|numeric',
             'ucf_situacao' => 'required|integer',
             'ucf_nome_arquivo' => 'string|max:255',
-            'ucf_arquivo' => 'string|max:255',
+            'ucf_arquivo' => 'file',
             'uuid_uco_id' => 'required|uuid'
         ];
 
