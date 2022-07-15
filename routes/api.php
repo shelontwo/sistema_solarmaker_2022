@@ -163,6 +163,14 @@ Route::middleware(['cors', 'logs'])->group(function () {
                 Route::post('novo', 'Api\UsinaInversorController@store');
                 Route::delete('remove/{uuid}', 'Api\UsinaInversorController@destroy');
             });
+
+            Route::prefix('{uuidUsina}/sistema-credito')->group(function () {
+                Route::get('/', 'Api\UsinaCreditoController@index');
+                Route::get('{uuid}', 'Api\UsinaCreditoController@show');
+                Route::post('novo', 'Api\UsinaCreditoController@store');
+                Route::post('edita', 'Api\UsinaCreditoController@update');
+                Route::delete('remove/{uuid}', 'Api\UsinaCreditoController@destroy');
+            });
         });
 
         Route::prefix('unidades-consumidoras')->group(function () {
