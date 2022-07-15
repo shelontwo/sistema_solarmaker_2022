@@ -192,7 +192,7 @@ class ChamadoService
     private function validaCampos($update = false)
     {
         $validacao = [
-            'cha_status' => 'required|boolean',
+            'cha_status' => 'required|integer',
             'cha_descricao' => 'required|string|max:255',
             'cha_solucao' => 'string|max:255|nullable',
             'uuid_cli_id' => 'required|uuid'
