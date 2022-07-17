@@ -6,11 +6,19 @@ use Exception;
 use App\Models\Integrador;
 use App\Models\Distribuidor;
 use App\Helpers\HelperBuscaId;
+use App\Services\S3\S3Service;
 use Illuminate\Support\Facades\Validator;
 
 class IntegradorService
 {
     protected $data;
+
+    protected $s3Service;
+    
+    public function __construct(S3Service $s3Service)
+    {
+        $this->s3Service = $s3Service;
+    }
 
     public function defineData($data)
     {
@@ -76,6 +84,10 @@ class IntegradorService
             }
 
             $this->data['fk_dis_id_distribuidor'] = HelperBuscaId::buscaId($this->data['uuid_dis_id'], Distribuidor::class);
+
+            if (isset($this->data['int_imagem']) && $this->data['int_imagem'] != 'null') {
+                $this->data['int_imagem'] = $this->s3Service->enviaS3($this->data['int_imagem'], 'integradores')->get('ObjectURL');
+            }
             
             $integrador = Integrador::create($this->data);
 

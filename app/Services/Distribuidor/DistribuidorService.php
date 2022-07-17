@@ -5,11 +5,19 @@ namespace App\Services\Distribuidor;
 use Exception;
 use App\Models\Distribuidor;
 use App\Helpers\HelperBuscaId;
+use App\Services\S3\S3Service;
 use Illuminate\Support\Facades\Validator;
 
 class DistribuidorService
 {
     protected $data;
+
+    protected $s3Service;
+    
+    public function __construct(S3Service $s3Service)
+    {
+        $this->s3Service = $s3Service;
+    }
 
     public function defineData($data)
     {
@@ -49,6 +57,10 @@ class DistribuidorService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
+            if (isset($this->data['dis_imagem']) && $this->data['dis_imagem'] != 'null') {
+                $this->data['dis_imagem'] = $this->s3Service->enviaS3($this->data['dis_imagem'], 'distribuidores')->get('ObjectURL');
+            }
+
             $distribuidor = Distribuidor::create($this->data);
 
             return ['status' => true, 'data' => $distribuidor];
@@ -64,6 +76,10 @@ class DistribuidorService
             
             if ($validacao->fails()) {
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
+            }
+
+            if (isset($this->data['dis_imagem']) && $this->data['dis_imagem'] != 'null') {
+                $this->data['dis_imagem'] = $this->s3Service->enviaS3($this->data['dis_imagem'], 'distribuidores')->get('ObjectURL');
             }
 
             $distribuidor = Distribuidor::find(HelperBuscaId::buscaId($this->data['uuid_dis_id'], Distribuidor::class));

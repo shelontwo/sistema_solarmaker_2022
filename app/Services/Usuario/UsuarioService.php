@@ -8,6 +8,7 @@ use App\Models\Usuario;
 use App\Models\Integrador;
 use App\Models\Distribuidor;
 use App\Helpers\HelperBuscaId;
+use App\Services\S3\S3Service;
 use Illuminate\Support\Facades\Hash;
 use App\Helpers\HelperVerificaDiferenca;
 use Illuminate\Support\Facades\Validator;
@@ -15,6 +16,13 @@ use Illuminate\Support\Facades\Validator;
 class UsuarioService
 {
     protected $data;
+
+    protected $s3Service;
+    
+    public function __construct(S3Service $s3Service)
+    {
+        $this->s3Service = $s3Service;
+    }
 
     public function defineData($data)
     {
@@ -114,6 +122,10 @@ class UsuarioService
 
             $this->data['password'] = Hash::make($this->data['password']);
 
+            if (isset($this->data['usu_imagem']) && $this->data['usu_imagem'] != 'null') {
+                $this->data['usu_imagem'] = $this->s3Service->enviaS3($this->data['usu_imagem'], 'usuarios')->get('ObjectURL');
+            }
+
             $usuario = Usuario::create($this->data);
 
             return ['status' => true, 'data' => $usuario];
@@ -140,6 +152,10 @@ class UsuarioService
                 $this->data['password'] = Hash::make($this->data['password']);
             }
             unset($this->data['uuid_gru_id']);
+
+            if (isset($this->data['usu_imagem']) && $this->data['usu_imagem'] != 'null') {
+                $this->data['usu_imagem'] = $this->s3Service->enviaS3($this->data['usu_imagem'], 'usuarios')->get('ObjectURL');
+            }
             
             $usuario = Usuario::find($usuarioId);
             $usuario->update($this->data);
