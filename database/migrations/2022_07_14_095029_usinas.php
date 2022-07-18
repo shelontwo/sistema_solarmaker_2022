@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('usi_latitude', 15)->nullable();
             $table->string('usi_longitude', 15)->nullable();
             $table->boolean('usi_status')->default(true);
+            $table->string('usi_webhook_url')->nullable();
             $table->unsignedInteger('fk_int_id_integrador');
             $table->foreign('fk_int_id_integrador')->references('int_id')->on('integradores');
             $table->unsignedInteger('fk_cli_id_cliente');

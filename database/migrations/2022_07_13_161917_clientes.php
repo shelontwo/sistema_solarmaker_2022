@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('cli_usuario', 80);
             $table->string('cli_senha', 80)->nullable();
             $table->boolean('cli_alterar_senha')->default(false);
+            $table->string('cli_webhook_url')->nullable();
             $table->unsignedInteger('fk_int_id_integrador');
             $table->foreign('fk_int_id_integrador')->references('int_id')->on('integradores');
             $table->timestamp('cli_criado_em')->useCurrent();

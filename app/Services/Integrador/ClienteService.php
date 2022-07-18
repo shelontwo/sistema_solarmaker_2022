@@ -8,11 +8,18 @@ use App\Models\Integrador;
 use App\Models\Distribuidor;
 use App\Models\IntegradorApi;
 use App\Helpers\HelperBuscaId;
+use App\Services\Webhook\WebhookService;
 use Illuminate\Support\Facades\Validator;
-
 class ClienteService
 {
     protected $data;
+
+    protected $webhookService;
+    
+    public function __construct(WebhookService $webhookService)
+    {
+        $this->webhookService = $webhookService;
+    }
 
     public function defineData($data)
     {
@@ -104,6 +111,7 @@ class ClienteService
             $this->data['fk_int_id_integrador'] = HelperBuscaId::buscaId($this->data['uuid_int_id'], Integrador::class);
             
             $cliente = Cliente::create($this->data);
+            $this->webhookService->novoWebhook(['fk_cli_id_cliente' => $cliente->cli_id]);
 
             return ['status' => true, 'data' => $cliente];
         } catch (\Exception $error) {
@@ -124,6 +132,8 @@ class ClienteService
 
             $cliente = Cliente::find(HelperBuscaId::buscaId($this->data['uuid_cli_id'], Cliente::class));
             $cliente->update($this->data);
+            
+            $this->webhookService->novoWebhook(['fk_cli_id_cliente' => $cliente->cli_id]);
 
             return ['status' => true, 'data' => $cliente];
         } catch (\Exception $error) {
@@ -134,7 +144,9 @@ class ClienteService
     public function removeCliente($uuid)
     {
         try {
-            $cliente = Cliente::where('uuid_cli_id', $uuid)->delete();
+            $cliente = Cliente::where('uuid_cli_id', $uuid)->first();
+            $this->webhookService->novoWebhook(['fk_cli_id_cliente' => $cliente->cli_id]);
+            $cliente->delete();
             return ['status' => true, 'msg' => $cliente ? 'Cliente removido com sucesso' : 'Erro ao remover cliente'];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
@@ -158,6 +170,7 @@ class ClienteService
             'cli_usuario' => 'required|string|max:255|nullable',
             'cli_senha' => 'string|max:255|nullable',
             'cli_alterar_senha' => 'boolean',
+            'cli_webhook_url' => 'url',
             'uuid_int_id' => 'required|uuid',
         ];
 

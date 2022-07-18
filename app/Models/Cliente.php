@@ -40,6 +40,7 @@ class Cliente extends Model
         'cli_usuario',
         'cli_senha',
         'cli_alterar_senha',
+        'cli_webhook_url',
         'fk_int_id_integrador'
 	];
 

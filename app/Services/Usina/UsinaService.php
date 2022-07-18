@@ -201,6 +201,7 @@ class UsinaService
             'usi_latitude' => 'string|max:255|nullable',
             'usi_longitude' => 'string|max:255|nullable',
             'usi_status' => 'boolean|nullable',
+            'usi_webhook_url' => 'url',
             'uuid_int_id' => 'required|uuid',
             'uuid_cli_id' => 'required|uuid',
         ];

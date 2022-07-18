@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\Log;
+use App\Models\Webhook;
 
 class Logs
 {
@@ -45,8 +46,8 @@ class Logs
                 $response_json = json_encode($response_json, JSON_UNESCAPED_UNICODE);
             }
         }
-        
-        Log::create([
+
+        $log = Log::create([
             'fk_usu_id_usuario' => $request->usu_id,
             'log_url' => $request->path(),
             'log_method' => $request->method(),
@@ -55,5 +56,12 @@ class Logs
             'log_status' => $response->getStatusCode(),
             'log_ip_address' => $request->getClientIps()[0],
         ]);
+
+        if ($request->webhook_id) {
+            $webhook = Webhook::find($request->webhook_id);
+            $webhook->update([
+                'fk_log_id_log' => $log->log_id
+            ]);
+        }
     }
 }

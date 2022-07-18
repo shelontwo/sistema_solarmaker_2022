@@ -38,6 +38,7 @@ class Usina extends Model
         'usi_latitude',
         'usi_longitude',
         'usi_status',
+        'usi_webhook_url',
         'usi_desativado_em',
         'fk_int_id_integrador',
         'fk_cli_id_cliente'
