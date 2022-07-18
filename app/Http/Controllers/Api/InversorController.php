@@ -19,7 +19,9 @@ class InversorController extends Controller
 
     public function index(Request $request)
     {
-        $data = $this->inversorService->indice($request);
+        $filtro = $request->input('filtro');
+        
+        $data = $this->inversorService->indice($request, $filtro == 'nao-designados' ? true : false);
 
         if ($data['status']) {
             return response()->json($data['data']);
