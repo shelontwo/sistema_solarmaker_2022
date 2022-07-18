@@ -13,9 +13,9 @@ return new class extends Migration
             $table->uuid('uuid_uco_id');
             $table->string('uco_codigo', 150);
             $table->string('uco_nome', 150);
-            $table->smallInteger('uco_classificacao');
+            $table->string('uco_classificacao', 50);
             $table->smallInteger('uco_tipo');
-            $table->smallInteger('uco_modalidade');
+            $table->string('uco_modalidade', 50);
             $table->unsignedInteger('fk_con_id_concessionaria');
             $table->foreign('fk_con_id_concessionaria')->references('con_id')->on('concessionarias');
             $table->timestamp('uco_criado_em')->useCurrent();

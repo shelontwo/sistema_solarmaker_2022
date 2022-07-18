@@ -123,7 +123,7 @@ class FaturaService
             'ucf_tarifa' => 'required|numeric',
             'ucf_energia' => 'required|numeric',
             'ucf_energia_injetada' => 'required|numeric',
-            'ucf_situacao' => 'required|integer',
+            'ucf_situacao' => 'required|string|max:50',
             'ucf_nome_arquivo' => 'string|max:255',
             'ucf_arquivo' => 'file',
             'uuid_uco_id' => 'required|uuid'

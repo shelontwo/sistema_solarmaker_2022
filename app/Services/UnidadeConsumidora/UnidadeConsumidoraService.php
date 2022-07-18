@@ -96,9 +96,9 @@ class UnidadeConsumidoraService
         $validacao = [
             'uco_codigo' => 'string|max:255',
             'uco_nome' => 'required|string|max:255',
-            'uco_classificacao' => 'required|integer',
+            'uco_classificacao' => 'required|string|max:50',
             'uco_tipo' => 'required|integer',
-            'uco_modalidade' => 'required|integer',
+            'uco_modalidade' => 'required|string|max:50',
             'uuid_con_id' => 'required|uuid'
         ];
 

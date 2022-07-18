@@ -11,9 +11,9 @@ return new class extends Migration
         Schema::create('unidades_consumidoras_credito', function (Blueprint $table) {
             $table->increments('ucc_id');
             $table->uuid('uuid_ucc_id');
-            $table->decimal('ucc_quantidade');
+            $table->string('ucc_quantidade', 50);
             $table->date('ucc_vigencia');
-            $table->smallInteger('ucc_posto_tarifario');
+            $table->string('ucc_posto_tarifario', 50);
             $table->text('ucc_observacao');
             $table->unsignedInteger('fk_usi_id_usina');
             $table->foreign('fk_usi_id_usina')->references('usi_id')->on('usinas');

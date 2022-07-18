@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('ucf_tarifa');
             $table->decimal('ucf_energia');
             $table->decimal('ucf_energia_injetada');
-            $table->smallInteger('ucf_situacao');
+            $table->string('ucf_situacao', 50);
             $table->string('ucf_nome_arquivo')->nullable();
             $table->string('ucf_arquivo')->nullable();
             $table->unsignedInteger('fk_uco_id_unidade');

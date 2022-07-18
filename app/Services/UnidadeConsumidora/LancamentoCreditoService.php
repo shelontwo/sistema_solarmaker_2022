@@ -38,7 +38,10 @@ class LancamentoCreditoService
     {
         try {
             $fk_uco_id_unidade = HelperBuscaId::buscaId($uuidUnidade, UnidadeConsumidora::class);
-            $credito = UnidadeConsumidoraCredito::where('fk_uco_id_unidade', $fk_uco_id_unidade)->where('uuid_ucc_id', $uuid)->first();
+            $credito = UnidadeConsumidoraCredito::where('fk_uco_id_unidade', $fk_uco_id_unidade)
+                ->where('uuid_ucc_id', $uuid)
+                ->with('usina')
+                ->first();
             return ['status' => true, 'data' => $credito];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
@@ -102,9 +105,9 @@ class LancamentoCreditoService
     private function validaCampos($update = false)
     {
         $validacao = [
-            'ucc_quantidade' => 'required|numeric',
+            'ucc_quantidade' => 'required|string|max:50',
             'ucc_vigencia' => 'required|date',
-            'ucc_posto_tarifario' => 'required|integer',
+            'ucc_posto_tarifario' => 'required|string',
             'ucc_observacao' => 'required|string',
             'uuid_usi_id' => 'required|uuid',
             'uuid_uco_id' => 'required|uuid'
