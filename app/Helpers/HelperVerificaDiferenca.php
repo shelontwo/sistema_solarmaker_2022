@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-Use Exception;
+use Exception;
 
 class HelperVerificaDiferenca
 {
