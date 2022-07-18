@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Usuario;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -40,8 +41,8 @@ class Log extends Model
         });
     }
 
-    public function user()
+    public function usuario()
 	{
-		return $this->hasOne(User::class, 'fk_user_id');
+		return $this->hasOne(Usuario::class, 'usu_id', 'fk_usu_id_usuario')->select('uuid_usu_id', 'usu_id', 'usu_nome');
 	}
 }
