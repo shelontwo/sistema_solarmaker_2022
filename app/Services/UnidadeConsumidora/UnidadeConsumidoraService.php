@@ -22,7 +22,7 @@ class UnidadeConsumidoraService
     public function indice($request)
     {
         try {
-            $unidades = UnidadeConsumidora::select('uuid_uco_id', 'uco_id', 'uco_nome', 'fk_con_id_concessionaria')
+            $unidades = UnidadeConsumidora::select('uuid_uco_id', 'uco_id', 'uco_nome', 'uco_codigo', 'fk_con_id_concessionaria')
                 ->with('concessionaria');
             $unidades = $request->input('page') ? $unidades->paginate() : $unidades->get();
                 
@@ -35,7 +35,7 @@ class UnidadeConsumidoraService
     public function listUnidade($uuid)
     {
         try {
-            $unidade = UnidadeConsumidora::where('uuid_uco_id', $uuid)->first();
+            $unidade = UnidadeConsumidora::where('uuid_uco_id', $uuid)->with('concessionaria')->first();
             return ['status' => true, 'data' => $unidade];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
