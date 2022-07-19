@@ -21,7 +21,7 @@ class StatusService
     public function indice($request)
     {
         try {
-            $status = UsinaStatus::select('uuid_uss_id', 'uss_id', 'uss_nome', 'uss_tipo');
+            $status = UsinaStatus::select('uuid_uss_id', 'uss_id', 'uss_nome', 'uss_tipo', 'uss_cor');
             $status = $request->input('page') ? $status->paginate() : $status->get();
                 
             return ['status' => true, 'data' => $status];
@@ -89,7 +89,8 @@ class StatusService
     {
         $validacao = [
             'uss_nome' => 'required|string|max:255',
-            'uss_tipo' => 'integer',
+            'uss_tipo' => 'required|integer',
+            'uss_cor' => 'required|string|max:255',
         ];
 
         if ($update) {

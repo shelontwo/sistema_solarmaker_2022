@@ -67,7 +67,7 @@ class Usina extends Model
 
     public function status()
     {
-        return $this->belongsTo(UsinaStatus::class, 'fk_uss_id_status')->select('uuid_uss_id', 'uss_id', 'uss_nome', 'uss_tipo');
+        return $this->belongsTo(UsinaStatus::class, 'fk_uss_id_status')->select('uuid_uss_id', 'uss_id', 'uss_nome', 'uss_tipo', 'uss_cor');
     }
 
     public function sistema_credito()
