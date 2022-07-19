@@ -31,7 +31,7 @@ class FaturaService
     {
         try {
             $fk_uco_id_unidade = HelperBuscaId::buscaId($uuidUnidade, UnidadeConsumidora::class);
-            $fatura = UnidadeConsumidoraFatura::where('fk_uco_id_unidade', $fk_uco_id_unidade);
+            $fatura = UnidadeConsumidoraFatura::select('*', 'ucf_arquivo as ucf_arquivo_link')->where('fk_uco_id_unidade', $fk_uco_id_unidade);
             $fatura = $request->input('page') ? $fatura->paginate() : $fatura->get();
             
             return ['status' => true, 'data' => $fatura];
@@ -44,7 +44,7 @@ class FaturaService
     {
         try {
             $fk_uco_id_unidade = HelperBuscaId::buscaId($uuidUnidade, UnidadeConsumidora::class);
-            $fatura = UnidadeConsumidoraFatura::where('fk_uco_id_unidade', $fk_uco_id_unidade)->where('uuid_ucf_id', $uuid)->first();
+            $fatura = UnidadeConsumidoraFatura::select('*', 'ucf_arquivo as ucf_arquivo_link')->where('fk_uco_id_unidade', $fk_uco_id_unidade)->where('uuid_ucf_id', $uuid)->first();
             return ['status' => true, 'data' => $fatura];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
@@ -85,6 +85,11 @@ class FaturaService
                 return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
             }
 
+            if (isset($this->data['remover_arquivo']) && $this->data['remover_arquivo'] == true) {
+                $this->data['ucf_nome_arquivo'] = null;
+                $this->data['ucf_arquivo'] = null;
+            }
+
             if (isset($this->data['ucf_arquivo']) && $this->data['ucf_arquivo'] != 'null') {
                 $this->data['ucf_arquivo'] = $this->s3Service->enviaS3($this->data['ucf_arquivo'], 'faturas')->get('ObjectURL');
             }
@@ -118,14 +123,14 @@ class FaturaService
             'ucf_inicio_ciclo' => 'required|date',
             'ucf_fim_ciclo' => 'required|date',
             'ucf_valor_tarifa' => 'required|numeric',
-            'ucf_consumida' => 'required|numeric',
-            'ucf_faturada' => 'required|numeric',
+            'ucf_consumida' => 'required|string|max:50',
+            'ucf_faturada' => 'required|string|max:50',
             'ucf_tarifa' => 'required|numeric',
-            'ucf_energia' => 'required|numeric',
-            'ucf_energia_injetada' => 'required|numeric',
+            'ucf_energia' => 'required|string|max:50',
+            'ucf_energia_injetada' => 'required|string|max:50',
             'ucf_situacao' => 'required|string|max:50',
-            'ucf_nome_arquivo' => 'string|max:255',
-            'ucf_arquivo' => 'file',
+            'ucf_nome_arquivo' => 'string|max:255|nullable',
+            'ucf_arquivo' => 'file|nullable',
             'uuid_uco_id' => 'required|uuid'
         ];
 
