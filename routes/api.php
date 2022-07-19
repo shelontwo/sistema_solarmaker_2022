@@ -130,6 +130,14 @@ Route::middleware(['cors', 'logs'])->group(function () {
             Route::delete('remove/{uuid}', 'Api\InversorController@destroy');
         });
 
+        Route::prefix('usinas-status')->group(function () {
+            Route::get('/', 'Api\UsinaStatusController@index');
+            Route::get('{uuid}', 'Api\UsinaStatusController@show');
+            Route::post('novo', 'Api\UsinaStatusController@store');
+            Route::post('edita', 'Api\UsinaStatusController@update');
+            Route::delete('remove/{uuid}', 'Api\UsinaStatusController@destroy');
+        });
+
         Route::prefix('usinas')->group(function () {
             Route::get('/', 'Api\UsinaController@index');
             Route::get('unidade-consumidora/{uuid}', 'Api\UsinaController@unidade');
