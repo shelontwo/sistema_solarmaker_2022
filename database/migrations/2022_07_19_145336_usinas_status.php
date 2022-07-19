@@ -12,7 +12,6 @@ return new class extends Migration
             $table->increments('uss_id');
             $table->uuid('uuid_uss_id');
             $table->string('uss_nome', 50);
-            $table->string('uss_cor', 10);
             $table->smallInteger('uss_tipo'); // 0 - não informado / 1 - normal / 2 - alerta / 3 - falha 
             $table->timestamp('uss_criado_em')->useCurrent();
             $table->timestamp('uss_atualizado_em')->useCurrent()->useCurrentOnUpdate();

@@ -28,7 +28,6 @@ class UsinaStatus extends Model
 		'uuid_uss_id',
       	'uss_nome',
       	'uss_tipo',
-        'uss_cor'
 	];
 
 	protected static function boot()
