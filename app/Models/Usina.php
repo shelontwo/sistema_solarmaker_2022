@@ -34,14 +34,16 @@ class Usina extends Model
         'usi_cidade',
         'usi_bairro',
         'usi_rua',
+        'usi_complemento',
         'usi_numero',
         'usi_latitude',
         'usi_longitude',
-        'usi_status',
+        'usi_desativada',
         'usi_webhook_url',
         'usi_desativado_em',
         'fk_int_id_integrador',
-        'fk_cli_id_cliente'
+        'fk_cli_id_cliente',
+        'fk_uss_id_status'
 	];
 
 	protected static function boot()
@@ -61,6 +63,11 @@ class Usina extends Model
     public function cliente()
     {
         return $this->belongsTo(Cliente::class, 'fk_cli_id_cliente')->select('uuid_cli_id', 'cli_id', 'cli_nome');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(UsinaStatus::class, 'fk_uss_id_status')->select('uuid_uss_id', 'uss_id', 'uss_nome', 'uss_tipo');
     }
 
     public function sistema_credito()
