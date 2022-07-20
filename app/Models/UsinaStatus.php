@@ -38,4 +38,9 @@ class UsinaStatus extends Model
             $usinaStatus->uuid_uss_id = Str::uuid()->toString();
         });
     }
+
+    public function usinas()
+    {
+        return $this->hasMany(Usina::class, 'fk_uss_id_status', 'uss_id')->select('uuid_usi_id', 'usi_id', 'usi_nome', 'fk_uss_id_status');
+    }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Cliente;
 use Illuminate\Support\Str;
+use App\Models\ChamadoComentario;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -45,5 +47,10 @@ class Chamado extends Model
     public function cliente()
     {
         return $this->belongsTo(Cliente::class, 'fk_cli_id_cliente')->select('uuid_cli_id', 'cli_id', 'cli_nome', 'fk_int_id_integrador');
+    }
+
+    public function comentarios()
+    {
+        return $this->hasMany(ChamadoComentario::class, 'fk_cha_id_chamado', 'cha_id');
     }
 }

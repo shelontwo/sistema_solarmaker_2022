@@ -25,6 +25,8 @@ Route::middleware(['cors', 'logs'])->group(function () {
     });
     
     Route::middleware('auth.jwt')->group(function () {
+        Route::get('dashboard', 'Api\DashboardController@index');
+
         Route::prefix('usuarios')->group(function () {
             Route::get('/', 'Api\UsuarioController@index');
             Route::get('master', 'Api\UsuarioController@master');
