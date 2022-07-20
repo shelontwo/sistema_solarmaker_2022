@@ -13,8 +13,8 @@ return new class extends Migration
             $table->uuid('uuid_ite_id');
             $table->timestamp('ite_data');
             $table->string('ite_nsu', 100);
-            $table->string('ite_usuario', 100);
-            $table->string('ite_senha', 100);
+            $table->string('ite_usuario', 100)->nullable();
+            $table->string('ite_senha', 100)->nullable();
             $table->unsignedInteger('fk_usi_id_usina')->nullable();
             $table->foreign('fk_usi_id_usina')->references('usi_id')->on('usinas');
             $table->unsignedInteger('fk_uco_id_unidade')->nullable();

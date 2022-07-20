@@ -122,7 +122,7 @@ class UsinaService
     public function listUsina($uuid)
     {
         try {
-            $usina = Usina::where('uuid_usi_id', $uuid)->first();
+            $usina = Usina::where('uuid_usi_id', $uuid)->with('integrador', 'cliente', 'status')->first();
             return ['status' => true, 'data' => $usina];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
@@ -209,7 +209,7 @@ class UsinaService
             'usi_latitude' => 'string|max:255|nullable',
             'usi_longitude' => 'string|max:255|nullable',
             'usi_desativada' => 'boolean|nullable',
-            'usi_webhook_url' => 'url',
+            // 'usi_webhook_url' => 'url',
             'uuid_int_id' => 'required|uuid',
             'uuid_cli_id' => 'required|uuid',
             'uuid_uss_id' => 'required|uuid',

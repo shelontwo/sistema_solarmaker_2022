@@ -24,7 +24,7 @@ class InterfaceService
     public function indice($request)
     {
         try {
-            $interfaces = Interfaces::select('uuid_ite_id', 'ite_id', 'ite_nome', 'fk_ite_id_Interface');
+            $interfaces = Interfaces::with('usina', 'unidade', 'integrador');
             $interfaces = $request->input('page') ? $interfaces->paginate() : $interfaces->get();
                 
             return ['status' => true, 'data' => $interfaces];
@@ -36,7 +36,7 @@ class InterfaceService
     public function listInterface($uuid)
     {
         try {
-            $interface = Interfaces::where('uuid_ite_id', $uuid)->first();
+            $interface = Interfaces::where('uuid_ite_id', $uuid)->with('usina', 'unidade', 'integrador')->first();
             return ['status' => true, 'data' => $interface];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
@@ -117,10 +117,10 @@ class InterfaceService
         $validacao = [
             'ite_data' => 'required|date',
             'ite_nsu' => 'required|string|max:255',
-            'ite_usuario' => 'string|max:255',
-            'ite_senha' => 'string|max:255',
-            'uuid_usi_id' => 'uuid|nullable',
-            'uuid_uni_id' => 'uuid|nullable',
+            'ite_usuario' => 'string|max:255|nullable',
+            'ite_senha' => 'string|max:255|nullable',
+            'uuid_usi_id' => 'required_if:uuid_uni_id,null|uuid|nullable',
+            'uuid_uni_id' => 'required_if:uuid_usi_id,null|uuid|nullable',
             'uuid_int_id' => 'uuid|nullable'
         ];
 

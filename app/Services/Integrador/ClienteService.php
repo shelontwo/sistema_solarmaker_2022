@@ -170,7 +170,7 @@ class ClienteService
             'cli_usuario' => 'required|string|max:255|nullable',
             'cli_senha' => 'string|max:255|nullable',
             'cli_alterar_senha' => 'boolean',
-            'cli_webhook_url' => 'url',
+            // 'cli_webhook_url' => 'url',
             'uuid_int_id' => 'required|uuid',
         ];
 

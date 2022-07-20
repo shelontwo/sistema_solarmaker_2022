@@ -205,5 +205,13 @@ Route::middleware(['cors', 'logs'])->group(function () {
                 Route::delete('remove/{uuid}', 'Api\UnidadeConsumidoraFaturaController@destroy');
             });
         });
+
+        Route::prefix('interfaces')->group(function () {
+            Route::get('/', 'Api\InterfaceController@index');
+            Route::get('{uuid}', 'Api\InterfaceController@show');
+            Route::post('novo', 'Api\InterfaceController@store');
+            Route::post('edita', 'Api\InterfaceController@update');
+            Route::delete('remove/{uuid}', 'Api\InterfaceController@destroy');
+        });
     });
 });
