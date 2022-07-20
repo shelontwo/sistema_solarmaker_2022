@@ -54,10 +54,12 @@ class InterfaceService
 
             if (isset($this->data['uuid_usi_id'])) {
                 $this->data['fk_usi_id_usina'] = HelperBuscaId::buscaId($this->data['uuid_usi_id'], Usina::class);
+                $this->data['fk_uco_id_unidade'] = null;
             }
 
             if (isset($this->data['uuid_uni_id'])) {
                 $this->data['fk_uco_id_unidade'] = HelperBuscaId::buscaId($this->data['uuid_uni_id'], UnidadeConsumidora::class);
+                $this->data['fk_usi_id_usina'] = null;
             }
 
             if (isset($this->data['uuid_int_id'])) {
@@ -83,10 +85,12 @@ class InterfaceService
 
             if (isset($this->data['uuid_usi_id'])) {
                 $this->data['fk_usi_id_usina'] = HelperBuscaId::buscaId($this->data['uuid_usi_id'], Usina::class);
+                $this->data['fk_uco_id_unidade'] = null;
             }
 
             if (isset($this->data['uuid_uni_id'])) {
                 $this->data['fk_uco_id_unidade'] = HelperBuscaId::buscaId($this->data['uuid_uni_id'], UnidadeConsumidora::class);
+                $this->data['fk_usi_id_usina'] = null;
             }
 
             if (isset($this->data['uuid_int_id'])) {
