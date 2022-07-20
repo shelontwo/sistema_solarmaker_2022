@@ -161,6 +161,11 @@ Route::middleware(['cors', 'logs'])->group(function () {
                 Route::delete('remove/{uuid}', 'Api\UsinaProducaoController@destroy');
             });
 
+            Route::prefix('{uuidUsina}/projeto')->group(function () {
+                Route::get('/', 'Api\UsinaProjetoController@show');
+                Route::post('edita', 'Api\UsinaProjetoController@update');
+            });
+
             Route::prefix('{uuidUsina}/indicadores')->group(function () {
                 Route::get('/', 'Api\UsinaIndicadorController@index');
                 Route::get('{uuid}', 'Api\UsinaIndicadorController@show');
