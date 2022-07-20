@@ -140,6 +140,8 @@ Route::middleware(['cors', 'logs'])->group(function () {
 
         Route::prefix('usinas')->group(function () {
             Route::get('/', 'Api\UsinaController@index');
+            Route::get('status', 'Api\UsinaController@status');
+            Route::post('status/edita', 'Api\UsinaController@updateStatus');
             Route::get('unidade-consumidora/{uuid}', 'Api\UsinaController@unidade');
             Route::get('distribuidor/{uuid}', 'Api\UsinaController@distribuidor');
             Route::get('integrador/{uuid}', 'Api\UsinaController@integrador');

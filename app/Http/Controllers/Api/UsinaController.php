@@ -27,6 +27,16 @@ class UsinaController extends Controller
         return response()->json(['msg' => $data['msg']],400);
     }
 
+    public function status(Request $request)
+    {
+        $data = $this->usinaService->listUsinasStatus($request);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']],400);
+    }
+
     public function unidade(Request $request, $uuid)
     {
         $data = $this->usinaService->listUsinasUnidade($request, $uuid);
@@ -95,6 +105,17 @@ class UsinaController extends Controller
 
         if ($data['status']) {
             return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']], 400);
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $this->usinaService->defineData($request->all());
+        $data = $this->usinaService->atualizaUsinaStatus();
+
+        if ($data['status']) {
+            return response()->json(['msg' => $data['msg']]);
         }
         return response()->json(['msg' => $data['msg']], 400);
     }

@@ -119,6 +119,38 @@ class UsinaService
         }
     }
 
+    public function listUsinasStatus($request)
+    {
+        try {
+            $usuario = auth()->user();
+
+            $usinas = Usina::select('uuid_usi_id', 'usi_id', 'usi_nome', 'usi_cidade', 'fk_uss_id_status')->with('status');
+
+            if ($usuario->fk_int_id_integrador) {
+                $usinas->where('fk_int_id_integrador', $usuario->fk_int_id_integrador);
+            }
+
+            if ($usuario->fk_dis_id_distribuidor) {
+                $distribuidor = Distribuidor::find($usuario->fk_dis_id_distribuidor);
+                $integradores = $distribuidor->integradores()->get();
+
+                $integradores_ids = [];
+
+                foreach ($integradores as $integrador) {
+                    array_push($integradores_ids, $integrador->int_id);
+                }
+
+                $usinas->whereIn('fk_int_id_integrador', $integradores_ids);
+            }
+
+            $usinas = $request->input('page') ? $usinas->paginate() : $usinas->get();
+            
+            return ['status' => true, 'data' => $usinas];
+        } catch (\Exception $error) {
+            return ['status' => false, 'msg' => $error->getMessage()];
+        }
+    }
+
     public function listUsina($uuid)
     {
         try {
@@ -180,6 +212,30 @@ class UsinaService
             $usina->update($this->data);
 
             return ['status' => true, 'data' => $usina];
+        } catch (\Exception $error) {
+            return ['status' => false, 'msg' => $error->getMessage()];
+        }
+    }
+
+    public function atualizaUsinaStatus()
+    {
+        try {
+            $validacao = Validator::make($this->data, [
+                'uuid_uss_id' => 'required|uuid',
+                'uuid_usi_id' => 'required|uuid'
+            ]);
+            
+            if ($validacao->fails()) {
+                return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
+            }
+
+            $this->data['fk_uss_id_status'] = HelperBuscaId::buscaId($this->data['uuid_uss_id'], UsinaStatus::class);
+            
+            $usina = Usina::find(HelperBuscaId::buscaId($this->data['uuid_usi_id'], Usina::class));
+
+            $usina->update($this->data);
+
+            return ['status' => true, 'msg' => 'Status da usina alterado com sucesso'];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
         }
