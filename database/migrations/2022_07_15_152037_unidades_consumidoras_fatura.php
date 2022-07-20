@@ -17,8 +17,8 @@ return new class extends Migration
             $table->decimal('ucf_valor_tarifa');
             $table->string('ucf_consumida', 50);
             $table->string('ucf_faturada', 50);
-            $table->decimal('ucf_tarifa');
-            $table->string('ucf_energia', 50);
+            $table->decimal('ucf_tarifa_compensada');
+            $table->string('ucf_energia_compensada', 50);
             $table->string('ucf_energia_injetada', 50);
             $table->string('ucf_situacao', 50);
             $table->string('ucf_nome_arquivo')->nullable();
