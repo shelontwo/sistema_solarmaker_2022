@@ -20,18 +20,34 @@ class ConfiguracaoService
         return $this;
     }
 
+    public function indice()
+    {
+        try {
+            $usuario = auth()->user();
+
+            $configuracao = Configuracao::with('distribuidor', 'integrador');
+
+            if ($usuario->fk_int_id_integrador) {
+                $configuracao->where('fk_int_id_integrador', $usuario->fk_int_id_integrador);
+            }
+            if ($usuario->fk_dis_id_distribuidor) {
+                $configuracao->where('fk_dis_id_distribuidor', $usuario->fk_dis_id_distribuidor);
+            }
+
+            $configuracao = $configuracao->get();
+
+            return ['status' => true, 'data' => $configuracao];
+        } catch (\Exception $error) {
+            return ['status' => false, 'msg' => $error->getMessage()];
+        }
+    }
+
     public function listConfiguracao($uuid)
     {
         try {
-            $relacao = Distribuidor::where('uuid_dis_id', $uuid)->first();
-            if (!$relacao) {
-                $relacao = Integrador::where('uuid_dis_id', $uuid)->first();
-                $this->data['fk_int_id_integrador'] = $relacao->int_id;
-            } else {
-                $this->data['fk_dis_id_distribuidor'] = $relacao->dis_id;
-            }
-
-            $configuracao = Configuracao::where('uuid_con_id', $uuid)->first();
+            $configuracao = Configuracao::where('uuid_con_id', $uuid)
+                ->with('distribuidor', 'integrador')
+                ->first();
             return ['status' => true, 'data' => $configuracao];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];

@@ -23,8 +23,13 @@ Route::middleware(['cors', 'logs'])->group(function () {
         Route::post('login', 'Api\AuthController@login');
         Route::post('logout', 'Api\AuthController@logout');
     });
+    
+    Route::prefix('discord/config')->group(function () {
+        Route::get('/', 'Api\ConfiguracaoController@index');
+        Route::post('/', 'Api\ConfiguracaoController@update');
+        Route::get('{uuid}', 'Api\ConfiguracaoController@show');
+    });
 
-    Route::post('discord/config', 'Api\ConfiguracaoController@update');
     
     Route::middleware('auth.jwt')->group(function () {
         Route::get('dashboard', 'Api\DashboardController@index');

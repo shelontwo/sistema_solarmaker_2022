@@ -41,4 +41,14 @@ class Configuracao extends Model
             $configuracao->uuid_con_id = Str::uuid()->toString();
         });
     }
+
+    public function distribuidor()
+    {
+        return $this->belongsTo(Distribuidor::class, 'fk_dis_id_distribuidor')->select('uuid_dis_id', 'dis_id', 'dis_nome');
+    }
+
+    public function integrador()
+    {
+        return $this->belongsTo(Integrador::class, 'fk_int_id_integrador')->select('uuid_int_id', 'int_id', 'int_nome');
+    }
 }

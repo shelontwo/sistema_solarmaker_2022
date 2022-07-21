@@ -17,6 +17,15 @@ class ConfiguracaoController extends Controller
         $this->configuracaoService = $configuracaoService;
     }
 
+    public function index(Request $request)
+    {
+        $data = $this->configuracaoService->indice($request);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']],400);
+    }
    
     public function show($uuid)
     {
