@@ -7,6 +7,7 @@ use App\Models\Chamado;
 use App\Models\Cliente;
 use App\Models\Integrador;
 use App\Models\Distribuidor;
+use App\Traits\DiscordTrait;
 use App\Helpers\HelperBuscaId;
 use Illuminate\Support\Facades\Validator;
 
@@ -143,6 +144,17 @@ class ChamadoService
             }
 
             $chamado = Chamado::create($this->data);
+
+            if (!$this->data['cha_status']) {
+                $cliente = $chamado->cliente->first();
+                $integrador = $cliente->integrador->first();
+                
+                DiscordTrait::send([
+                    'fk_int_id_integrador' => $integrador->int_id,
+                    'con_tipo' => 'geral',
+                    'body' => '<b>Novo chamado aberto:</b> Cliente - ' . $cliente->cli_nome . ' <br>Descrição: '. $chamado->cha_descricao
+                ]);
+            }
 
             return ['status' => true, 'data' => $chamado];
         } catch (\Exception $error) {
