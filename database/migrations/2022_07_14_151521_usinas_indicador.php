@@ -11,7 +11,8 @@ return new class extends Migration
         Schema::create('usinas_indicador', function (Blueprint $table) {
             $table->increments('uin_id');
             $table->uuid('uuid_uin_id');
-            $table->timestamp('uin_data');
+            $table->date('uin_data');
+            $table->time('uin_hora');
             $table->string('uin_campo', 150);
             $table->string('uin_valor', 150);
             $table->unsignedInteger('fk_usi_id_usina');

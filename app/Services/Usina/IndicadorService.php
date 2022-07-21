@@ -23,7 +23,7 @@ class IndicadorService
     {
         try {
             $fk_usi_id_usina = HelperBuscaId::buscaId($uuidUsina, Usina::class);
-            $indicadores = UsinaIndicador::select('uuid_uin_id', 'uin_id', 'uin_data', 'uin_campo', 'uin_valor')
+            $indicadores = UsinaIndicador::select('uuid_uin_id', 'uin_id', 'uin_data', 'uin_hora', 'uin_campo', 'uin_valor')
                 ->where('fk_usi_id_usina', $fk_usi_id_usina);
             $indicadores = $request->input('page') ? $indicadores->paginate() : $indicadores->get();
             
@@ -100,6 +100,7 @@ class IndicadorService
     {
         $validacao = [
             'uin_data' => 'required|date',
+            'uin_hora' => 'required|string',
             'uin_campo' => 'required|string|max:255',
             'uin_valor' => 'required|string|max:255',
             'uuid_usi_id' => 'required|uuid',
