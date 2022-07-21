@@ -23,7 +23,7 @@ class ProducaoService
     {
         try {
             $fk_usi_id_usina = HelperBuscaId::buscaId($uuidUsina, Usina::class);
-            $producoes = UsinaProducao::select('uuid_upr_id', 'upr_id', 'upr_data', 'upr_producao', 'upr_tipo')
+            $producoes = UsinaProducao::select('uuid_upr_id', 'upr_id', 'upr_data', 'upr_hora', 'upr_producao', 'upr_tipo')
                 ->where('fk_usi_id_usina', $fk_usi_id_usina);
             $producoes = $request->input('page') ? $producoes->paginate() : $producoes->get();
             
@@ -37,7 +37,7 @@ class ProducaoService
     {
         try {
             $fk_usi_id_usina = HelperBuscaId::buscaId($uuidUsina, Usina::class);
-            $producoes = UsinaProducao::select('uuid_upr_id', 'upr_id', 'upr_data', 'upr_producao', 'upr_tipo')
+            $producoes = UsinaProducao::select('uuid_upr_id', 'upr_id', 'upr_data', 'upr_hora', 'upr_producao', 'upr_tipo')
                 ->where('fk_usi_id_usina', $fk_usi_id_usina)
                 ->where('upr_tipo', $tipo);
             $producoes = $request->input('page') ? $producoes->paginate() : $producoes->get();
@@ -115,6 +115,7 @@ class ProducaoService
     {
         $validacao = [
             'upr_data' => 'required|date',
+            'upr_hora' => 'required|string|nullable',
             'upr_producao' => 'required|numeric',
             'upr_tipo' => 'required|integer',
             'uuid_usi_id' => 'required|uuid',

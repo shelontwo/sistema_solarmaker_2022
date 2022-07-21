@@ -12,7 +12,7 @@ return new class extends Migration
             $table->increments('uin_id');
             $table->uuid('uuid_uin_id');
             $table->date('uin_data');
-            $table->time('uin_hora');
+            $table->time('uin_hora')->nullable();
             $table->string('uin_campo', 150);
             $table->string('uin_valor', 150);
             $table->unsignedInteger('fk_usi_id_usina');

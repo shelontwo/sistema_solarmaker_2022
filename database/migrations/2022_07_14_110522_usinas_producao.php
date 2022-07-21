@@ -11,7 +11,8 @@ return new class extends Migration
         Schema::create('usinas_producao', function (Blueprint $table) {
             $table->increments('upr_id');
             $table->uuid('uuid_upr_id');
-            $table->timestamp('upr_data');
+            $table->date('upr_data');
+            $table->time('upr_hora')->nullable();
             $table->decimal('upr_producao');
             $table->tinyInteger('upr_tipo')->default(1); // 1 - produção diária | 2 - produção instantanea
             $table->unsignedInteger('fk_usi_id_usina');

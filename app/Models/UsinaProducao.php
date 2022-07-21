@@ -27,6 +27,7 @@ class UsinaProducao extends Model
 	protected $fillable = [
 		'uuid_upr_id',
       	'upr_data',
+        'upr_hora',
         'upr_producao',
         'upr_tipo',
         'fk_usi_id_usina'
