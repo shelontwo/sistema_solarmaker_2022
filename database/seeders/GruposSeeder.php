@@ -45,7 +45,6 @@ class GruposSeeder extends Seeder
         foreach ($modules as $module) {
             foreach ($groups as $group) {
                 DB::table('grupos_modulos')->insert([
-                    'uuid_gmo_id' => Str::uuid()->toString(),
                     'fk_gru_id_grupo' => $group->gru_id, 'fk_mod_id_modulo' => $module->mod_id,
                 ]);
             }
