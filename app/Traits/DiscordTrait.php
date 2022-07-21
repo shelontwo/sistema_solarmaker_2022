@@ -36,9 +36,10 @@ trait DiscordTrait
             ];
 
             $urlApi = env('DISCORD_API') . 'msg';
-            $body = json_encode($dados);
+            $body = json_encode($dados, JSON_UNESCAPED_UNICODE);
 
-            Http::post($urlApi, $body);
+            $response = Http::post($urlApi, $dados);
+            // dd($response->body());
         } catch (\Throwable $th) {
             return false;
         }

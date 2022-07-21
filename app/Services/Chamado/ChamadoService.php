@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 
 class ChamadoService
 {
+    use DiscordTrait;
+    
     protected $data;
 
     public function defineData($data)
@@ -148,11 +150,11 @@ class ChamadoService
             if (!$this->data['cha_status']) {
                 $cliente = $chamado->cliente->first();
                 $integrador = $cliente->integrador->first();
-                
-                DiscordTrait::send([
+               
+                $this->send([
                     'fk_int_id_integrador' => $integrador->int_id,
                     'con_tipo' => 'geral',
-                    'body' => '<b>Novo chamado aberto:</b> Cliente - ' . $cliente->cli_nome . ' <br>Descrição: '. $chamado->cha_descricao
+                    'body' => 'Novo chamado aberto [' . $chamado->cha_id . ']: Cliente - ' . $cliente->cli_nome . ' - Descrição: '. $chamado->cha_descricao
                 ]);
             }
 
