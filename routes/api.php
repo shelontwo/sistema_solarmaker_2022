@@ -178,7 +178,9 @@ Route::middleware(['cors', 'logs'])->group(function () {
 
             Route::prefix('{uuidUsina}/inversores')->group(function () {
                 Route::get('/', 'Api\UsinaInversorController@index');
+                Route::get('{uuid}', 'Api\UsinaInversorController@show');
                 Route::post('novo', 'Api\UsinaInversorController@store');
+                Route::post('edita', 'Api\UsinaInversorController@update');
                 Route::delete('remove/{uuid}', 'Api\UsinaInversorController@destroy');
             });
 

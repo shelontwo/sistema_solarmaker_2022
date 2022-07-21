@@ -27,6 +27,7 @@ class UsinaIndicador extends Model
 	protected $fillable = [
 		'uuid_uin_id',
       	'uin_data',
+      	'uin_hora',
         'uin_campo',
         'uin_valor',
         'fk_usi_id_usina'

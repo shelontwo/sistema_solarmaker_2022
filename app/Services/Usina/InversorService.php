@@ -36,6 +36,20 @@ class InversorService
         }
     }
 
+    public function listInversor($uuidUsina, $uuid)
+    {
+        try {
+            $fk_usi_id_usina = HelperBuscaId::buscaId($uuidUsina, Usina::class);
+            $inversor = UsinaInversor::where('fk_usi_id_usina', $fk_usi_id_usina)
+                ->where('uuid_inu_id', $uuid)
+                ->with('inversor')
+                ->first();
+            return ['status' => true, 'data' => $inversor];
+        } catch (\Exception $error) {
+            return ['status' => false, 'msg' => $error->getMessage()];
+        }
+    }
+
     public function novoInversor($uuidUsina)
     {
         try {
@@ -57,6 +71,28 @@ class InversorService
         }
     }
 
+    public function atualizaInversor($uuidUsina)
+    {
+        try {
+            $this->data['uuid_usi_id'] = $uuidUsina;
+            $validacao = $this->validaCampos(true);
+            
+            if ($validacao->fails()) {
+                return ['status' => false, 'msg' => $validacao->errors(), 'http_status' => 406];
+            }
+
+            $this->data['fk_usi_id_usina'] = HelperBuscaId::buscaId($this->data['uuid_usi_id'], Usina::class);
+            $this->data['fk_inv_id_inversor'] = HelperBuscaId::buscaId($this->data['uuid_inv_id'], Inversor::class);
+
+            $inversor = UsinaInversor::find(HelperBuscaId::buscaId($this->data['uuid_inu_id'], UsinaInversor::class));
+            $inversor->update($this->data);
+
+            return ['status' => true, 'data' => $inversor];
+        } catch (\Exception $error) {
+            return ['status' => false, 'msg' => $error->getMessage()];
+        }
+    }
+
     public function removeInversor($uuidUsina, $uuid)
     {
         try {
@@ -67,7 +103,7 @@ class InversorService
         }
     }
 
-    private function validaCampos()
+    private function validaCampos($update = false)
     {
         $validacao = [
             'inu_painel_quantidade' => 'required|integer',
@@ -75,6 +111,10 @@ class InversorService
             'uuid_usi_id' => 'required|uuid',
             'uuid_inv_id' => 'required|uuid',
         ];
+
+        if ($update) {
+            $validacao['uuid_inu_id'] = 'required|uuid';
+        }
 
         return Validator::make($this->data, $validacao);
     }

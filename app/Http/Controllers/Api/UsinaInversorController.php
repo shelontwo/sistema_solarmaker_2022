@@ -37,6 +37,27 @@ class UsinaInversorController extends Controller
         }
         return response()->json(['msg' => $data['msg']], isset($data['http_status']) ? $data['http_status'] : 400);
     }
+
+    public function show($uuidUsina, $uuid)
+    {
+        $data = $this->inversorService->listInversor($uuidUsina, $uuid);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']],400);
+    }
+
+    public function update(Request $request, $uuidUsina)
+    {
+        $this->inversorService->defineData($request->all());
+        $data = $this->inversorService->atualizaInversor($uuidUsina);
+
+        if ($data['status']) {
+            return response()->json($data['data']);
+        }
+        return response()->json(['msg' => $data['msg']], 400);
+    }
    
     public function destroy($uuidUsina, $uuid)
     {

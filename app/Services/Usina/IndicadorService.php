@@ -100,7 +100,7 @@ class IndicadorService
     {
         $validacao = [
             'uin_data' => 'required|date',
-            'uin_hora' => 'required|string',
+            'uin_hora' => 'required|string|nullable',
             'uin_campo' => 'required|string|max:255',
             'uin_valor' => 'required|string|max:255',
             'uuid_usi_id' => 'required|uuid',
