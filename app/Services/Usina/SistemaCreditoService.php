@@ -39,7 +39,11 @@ class SistemaCreditoService
     {
         try {
             $fk_usi_id_usina = HelperBuscaId::buscaId($uuidUsina, Usina::class);
-            $credito = UsinaSistemaCredito::where('fk_usi_id_usina', $fk_usi_id_usina)->where('uuid_usc_id', $uuid)->first();
+            $credito = UsinaSistemaCredito::where('fk_usi_id_usina', $fk_usi_id_usina)
+                ->where('uuid_usc_id', $uuid)
+                ->with('unidade')
+                ->first();
+                
             return ['status' => true, 'data' => $credito];
         } catch (\Exception $error) {
             return ['status' => false, 'msg' => $error->getMessage()];
