@@ -23,6 +23,8 @@ Route::middleware(['cors', 'logs'])->group(function () {
         Route::post('login', 'Api\AuthController@login');
         Route::post('logout', 'Api\AuthController@logout');
     });
+
+    Route::post('discord/config', 'Api\ConfiguracaoController@update');
     
     Route::middleware('auth.jwt')->group(function () {
         Route::get('dashboard', 'Api\DashboardController@index');

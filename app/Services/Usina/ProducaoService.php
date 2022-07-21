@@ -115,7 +115,7 @@ class ProducaoService
     {
         $validacao = [
             'upr_data' => 'required|date',
-            'upr_hora' => 'required|string|nullable',
+            'upr_hora' => 'string|nullable',
             'upr_producao' => 'required|numeric',
             'upr_tipo' => 'required|integer',
             'uuid_usi_id' => 'required|uuid',
