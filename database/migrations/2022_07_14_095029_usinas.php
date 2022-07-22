@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('usi_rua')->nullable();
             $table->string('usi_complemento')->nullable();
             $table->string('usi_numero', 50)->nullable();
-            $table->string('usi_latitude', 15)->nullable();
-            $table->string('usi_longitude', 15)->nullable();
+            $table->string('usi_latitude', 25)->nullable();
+            $table->string('usi_longitude', 25)->nullable();
             $table->boolean('usi_desativada')->default(false);
             $table->string('usi_webhook_url')->nullable();
             $table->unsignedInteger('fk_int_id_integrador');

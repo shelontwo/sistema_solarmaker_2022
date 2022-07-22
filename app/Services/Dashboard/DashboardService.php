@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Usina;
 use App\Models\Modulo;
 use App\Models\Chamado;
+use App\Models\Integrador;
 use App\Models\UsinaStatus;
 use App\Models\Distribuidor;
 use App\Helpers\HelperBuscaId;
@@ -42,7 +43,7 @@ class DashboardService
             $usuario = auth()->user();
 
             // Lista de usinas baseado nos acessos do user, trazendo o cliente e o status
-            $usinas = Usina::select('uuid_usi_id', 'usi_id', 'usi_nome', 'usi_latitude', 'usi_longitude', 'fk_cli_id_cliente', 'fk_uss_id_status')
+            $usinas = Usina::select('uuid_usi_id', 'usi_id', 'usi_nome', 'usi_latitude', 'usi_desativado_em', 'usi_longitude', 'fk_cli_id_cliente', 'fk_uss_id_status')
                 ->with('cliente', 'status');
 
             if ($usuario->fk_int_id_integrador) {
